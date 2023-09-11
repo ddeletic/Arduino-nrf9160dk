@@ -1,0 +1,34 @@
+# Copyright (c) 2016-2017 Arduino Srl.  All right reserved.
+#
+
+
+######################################
+########### BOSL nrf9160dk ###########
+######################################
+
+nrf9160dk.name=nrf9160dk
+
+nrf9160dk.build.mcu=cortex-m33
+nrf9160dk.build.f_cpu=32000000L
+nrf9160dk.build.usb_product="nrf9160dk"
+nrf9160dk.build.board=nrf9160dk
+nrf9160dk.build.core=zephyr
+#nrf9160dk.build.extra_flags=--board nrf9160dk_nrf9160
+nrf9160dk.build.variant=arduino_nrf9160dk
+nrf9160dk.build.components=components
+nrf9160dk.build.vid=0x1366
+nrf9160dk.build.pid=0x1055
+
+nrf9160dk.vid.0=0x1366
+nrf9160dk.pid.0=0x1055
+
+nrf9160dk.upload_port.vid=0x1366
+nrf9160dk.upload_port.pid=0x1055
+nrf9160dk.upload.tool=nrfjprog_isp
+nrf9160dk.upload.tool.default=nrfjprog_isp
+nrf9160dk.upload.protocol=
+nrf9160dk.upload.maximum_size= 1048576
+nrf9160dk.upload.maximum_data_size=90112
+
+
+
