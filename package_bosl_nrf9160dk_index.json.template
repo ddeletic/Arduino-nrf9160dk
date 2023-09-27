@@ -18,10 +18,10 @@
 				"help": {
 					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
 				},
-				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/bosl_nrf9160dk_v1.0.0.zip",
-				"archiveFileName": "bosl_nrf9160dk_v1.0.0.zip",
-				"size": "5678484",
-				"checksum": "MD5:e70e76aca7e9b462ee999ee70efc5ad4",
+				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__PLATFORM_ARCHIVE_FILENAME__",
+				"archiveFileName": "__PLATFORM_ARCHIVE_FILENAME__",
+				"size": "__PLATFORM_ARCHIVE_SIZE__",
+				"checksum": "MD5:__PLATFORM_ARCHIVE_CHECKSUM__",
 				"toolsDependencies": [
 					{ "packager": "bosl", "name": "arm-zephyr-eabi","version": "12.2.0" },
 					{ "packager": "bosl", "name": "gen_isr_tables",	"version": "0.0.0" },
@@ -36,10 +36,10 @@
 				"version": "12.2.0",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://drive.google.com/file/d/1LZIyqW0OcinvWsikUtaMLgtec3Vt_-Eb/view?usp=drive_link",
-					"archiveFileName": "arm-zephyr-eabi_v12.2.0.zip",
-					"size": "101931066",
-					"checksum": "MD5:67390264f478ad50259456f0fe8c729a"
+					"url": "https://www.deletic.org/BoSL/__ARM_ZEPHYR_EABI_ARCHIVE_FILENAME__",
+					"archiveFileName": "__ARM_ZEPHYR_EABI_ARCHIVE_FILENAME__",
+					"size": "__ARM_ZEPHYR_EABI_ARCHIVE_SIZE__",
+					"checksum": "MD5:__ARM_ZEPHYR_EABI_ARCHIVE_CHECKSUM__"
 				}]
 			},
 			{
@@ -47,21 +47,21 @@
 				"version": "0.0.0",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/gen_isr_tables_v0.0.0.zip",
-					"archiveFileName": "gen_isr_tables_v0.0.0.zip",
-					"size": "8285141",
-					"checksum": "MD5:c8e266cad358eda4efa4e65b369a8681"
+					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
+					"archiveFileName": "__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
+					"size": "__GEN_ISR_TABLES_ARCHIVE_SIZE__",
+					"checksum": "MD5:__GEN_ISR_TABLES_ARCHIVE_CHECKSUM__"
 				}]
 			},
 			{
 				"name": "nrfjprog",
 				"version": "10.22.1",
 				"systems": [{
-					"size": "10386339",
-					"checksum": "MD5:a1ada14c255c5126afcf2c84f4fc1098",
 					"host": "i686-mingw32",
-					"archiveFileName": "nrfjprog_v10.22.1.zip",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/nrfjprog_v10.22.1.zip"
+					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__NRFJPROG_ARCHIVE_FILENAME__",
+					"archiveFileName": "__NRFJPROG_ARCHIVE_FILENAME__",
+					"size": "__NRFJPROG_ARCHIVE_SIZE__",
+					"checksum": "MD5:__NRFJPROG_ARCHIVE_CHECKSUM__"
 				}]
 			}
 		]
