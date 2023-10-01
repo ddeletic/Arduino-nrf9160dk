@@ -21,37 +21,38 @@
 MY_DIR=$(realpath $(dirname $0))
 HARDWARE_DIR=${MY_DIR}/bosl/hardware/nrf9160/1.0.0
 SAMPLE_DIR=${MY_DIR}/sample_zephyr_project
-ZEPHYRPROJECT_DIR=~/Documents/Dev/bosl/zephyr/zephyrproject
-ZEPHYR_TOOLKIT_SRC_DIR=~/Documents/Dev/bosl/zephyr-sdk-0.16.1/arm-zephyr-eabi
+ZEPHYRPROJECT_DIR=${MY_DIR}/zephyrproject
+ZEPHYR_TOOLKIT_SRC_DIR=$(realpath $(ls -1 -d ${MY_DIR}/zephyr-sdk-* | head -n 1))/arm-zephyr-eabi
 NRFJPROG_SRC_DIR="/c/Program Files/Nordic Semiconductor/nrf-command-line-tools"
 
 ZEPHYR_TOOLKIT_DST_DIR=${MY_DIR}/bosl/tools/arm-zephyr-eabi/12.2.0
 NRFJPROG_DST_DIR=${MY_DIR}/bosl/tools/nrfjprog/10.22.1
 GEN_ISR_TABLES_DST_DIR=${MY_DIR}/bosl/tools/gen_isr_tables/0.0.0
 
-# NOTE: ZEPHYRPROJECT_DIR, ZEPHYR_TOOLKIT_SRC_DIR and NRFJPROG_SRC_DIR 
-#		all point to directories residing outside of this project. 
-#		These all must be installed and their locations adjusted above 
-#		accordingly. Please do not commit changes to repository.
+# NOTE: NRFJPROG_SRC_DIR points to directories residing outside of this project. 
+#		Nordic Semiconductor command-line-tools must be installed and their 
+#		locations adjusted above accordingly. Please do not commit changes to 
+#		repository.
 
-if [ ! -d "${SAMPLE_DIR}/build/zephyr/include/generated" ]; then
-	echo 'Error: Sample project (sample_zephyr_project) appears not to have been built. '
-	echo '       Please build sample_zephyr_project zephyr and try again.'
+if [ ! -d "${NRFJPROG_SRC_DIR}" ]; then
+	echo 'Error: Nordic Programming Tool directory cannot be found.'
+	echo '       Please edit this script and point NRFJPROG_SRC_DIR'
+	echo '       to the correct location.'
 	exit
 fi
 if [ ! -d "${ZEPHYRPROJECT_DIR}" ]; then
 	echo 'Error: Zephyr project directory (zephyrproject) cannot be found.'
-	echo '       Please point ZEPHYRPROJECT_DIR to the correct location.'
+	echo '       Please run setup.sh and ensure it completes successfully.'
 	exit
 fi
 if [ ! -d "${ZEPHYR_TOOLKIT_SRC_DIR}" ]; then
 	echo 'Error: Zephyr toolkit directory (zephyr-sdk-x.y.z\arm-zephyr-eabi) cannot be found.'
-	echo '       Please point ZEPHYR_TOOLKIT_SRC_DIR to the correct location.'
+	echo '       Please run setup.sh and ensure it completes successfully.'
 	exit
 fi
-if [ ! -d "${NRFJPROG_SRC_DIR}" ]; then
-	echo 'Error: Nordic Programming Tool directory cannot be found.'
-	echo '       Please point NRFJPROG_SRC_DIR to the correct location.'
+if [ ! -d "${SAMPLE_DIR}/build/zephyr/include/generated" ]; then
+	echo 'Error: Sample project (sample_zephyr_project) appears not to have been built. '
+	echo '       Please build sample_zephyr_project zephyr and try again.'
 	exit
 fi
 

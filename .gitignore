@@ -3,3 +3,7 @@ sample_zephyr_project/build/
 bosl/hardware/nrf9160/1.0.0/lib/
 bosl/hardware/nrf9160/1.0.0/inc/
 dist/
+zephyr-sdk-0.16.3_windows-x86_64.7z
+zephyrproject/.venv/
+zephyrproject/.west/config
+zephyr-sdk-0.16.3/
