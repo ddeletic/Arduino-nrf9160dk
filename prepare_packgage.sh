@@ -147,7 +147,7 @@ copy_headers ${ZEPHYRPROJECT_DIR}/modules/hal/nordic/nrfx/haly	"${DST_DIR}"/zeph
 copy_headers ${ZEPHYRPROJECT_DIR}/modules/hal/nordic/nrfx/drivers/"*.h"	"${DST_DIR}"/zephyrproject/modules/hal/nordic/nrfx/drivers/
 copy_headers ${ZEPHYRPROJECT_DIR}/modules/hal/nordic/nrfx/drivers/include/"*.h"	"${DST_DIR}"/zephyrproject/modules/hal/nordic/nrfx/drivers/include
 copy_headers ${ZEPHYRPROJECT_DIR}/zephyr/modules/hal_nordic/nrfx/"*.h"	"${DST_DIR}"/zephyrproject/zephyr/modules/hal_nordic/nrfx
-copy_headers ${ZEPHYRPROJECT_DIR}/zephyr/lib/libc/minimal/include	"${DST_DIR}"/zephyrproject/zephyr/lib/libc/minimal		--recursive
+copy_headers ${ZEPHYRPROJECT_DIR}/zephyr/lib/cpp/minimal/include	"${DST_DIR}"/zephyrproject/zephyr/lib/libc/minimal		--recursive
 copy_headers ${ZEPHYRPROJECT_DIR}/zephyr/include/zephyr/toolchain/zephyr_stdint.h	"${DST_DIR}"/zephyrproject/zephyr/include/zephyr/toolchain/
 
 find "${DST_DIR}" -type f ! -iname "*.h" -delete

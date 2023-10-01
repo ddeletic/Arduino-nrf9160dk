@@ -42,13 +42,13 @@ recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" {compiler.cpp.flags} 
 # C++ Compile 
 compiler.cpp.cmd=arm-zephyr-eabi-g++.exe
 
-compiler.cpp.flags=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -D__PROGRAM_START -D__ZEPHYR__=1 -fno-strict-aliasing -Os -fcheck-new -std=c++11 -fno-exceptions -fno-rtti -fno-common -g -gdwarf-4 -fdiagnostics-color=always -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections -nostdinc -nostdinc++ -Wno-unused-variable -Wno-comment -fno-diagnostics-color
+compiler.cpp.flags=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -DPICOLIBC_DOUBLE_PRINTF_SCANF -D_FORTIFY_SOURCE=1 -D_POSIX_C_SOURCE=200809 -D__LINUX_ERRNO_EXTENSIONS__ -D__PROGRAM_START -D__ZEPHYR__=1 -fno-strict-aliasing -Os -fcheck-new -std=c++11 -fno-exceptions -fno-rtti -fno-common -g -gdwarf-4 -fdiagnostics-color=always -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections -nostdinc -nostdinc++ -Wno-unused-variable -Wno-comment -fno-diagnostics-color
 
 compiler.include.paths="-I{runtime.platform.path}/inc/generated" "-I{zephyr.path}/zephyr/include"  "-I{zephyr.path}/zephyr/soc/arm/nordic_nrf/nrf91" "-I{zephyr.path}/zephyr/soc/arm/nordic_nrf/common" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/cores/arduino" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/variants" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/libraries/Wire" "-I{zephyr.path}/modules/hal/cmsis/CMSIS/Core/Include" "-I{zephyr.path}/zephyr/modules/cmsis" "-I{zephyr.path}/modules/hal/nordic/nrfx" "-I{zephyr.path}/modules/hal/nordic/nrfx/drivers/include" "-I{zephyr.path}/modules/hal/nordic/nrfx/mdk" "-I{zephyr.path}/zephyr/modules/hal_nordic/nrfx"
 
-compiler.system_include.paths=-isystem "{zephyr.path}/zephyr/lib/libc/minimal/include" -isystem "{zephyr.path}/zephyr/lib/cpp/minimal/include" -isystem "{compiler.path}/../lib/gcc/arm-zephyr-eabi/12.2.0/include" -isystem "{compiler.path}/../lib/gcc/arm-zephyr-eabi/12.2.0/include-fixed"
+compiler.system_include.paths=-isystem "{zephyr.path}/zephyr/lib/cpp/minimal/include" 
 
-compiler.macro.paths=-imacros "{runtime.platform.path}/inc/generated/autoconf.h" -imacros "{zephyr.path}/zephyr/include/zephyr/toolchain/zephyr_stdint.h" -fmacro-prefix-map={zephyr.path}/zephyr=ZEPHYR_BASE 
+compiler.macro.paths=-imacros "{runtime.platform.path}/inc/generated/autoconf.h" -imacros "{zephyr.path}/zephyr/include/zephyr/toolchain/zephyr_stdint.h" 
 
 compiler.cpp.include={compiler.include.paths} {compiler.system_include.paths} {compiler.macro.paths}
 
