@@ -56,3 +56,10 @@ If you need to publish the BSP:
 - Copy the JSON file to a location on the internet
 - Publish the link to the JSON
 - Users need to add the link to JSON in their Arduino IDE Preferences, under 'Additional boards manager URLs'
+
+## Using the BSP
+
+If you only want to use the BSP to create sketches for nRF9160dk board, in Arduino Preferences, add 'https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/package_bosl_nrf9160dk_index.json' to 'Additional boards manager URLs'. Save preferences.
+
+Open the Board Manager and search for 'bosl'. Only one result will come up. Install and have fun.
+
