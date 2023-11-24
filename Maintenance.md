@@ -24,4 +24,4 @@ When linking in Arduino fails, the following recipe applies:
 
 ## Build process
 
-Zephyr application build process comprises two stage linking. If this changes, we will nave to adjust the linking process in platform.txt and perhaps tools used (gen_isr_tables may need to be updated or other tools added). This is likely to be quite involved, but clues can be picked up from `ninja --verbose`
+Zephyr application build process comprises two stage linking. If this changes, we will have to adjust the linking process in platform.txt and perhaps tools used (gen_isr_tables may need to be updated or other tools added). This is likely to be quite involved, but clues can be picked up from `ninja --verbose`
