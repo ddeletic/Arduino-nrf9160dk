@@ -1,3 +1,6 @@
 [submodule "ArduinoCore-API"]
 	path = ArduinoCore-API
 	url = https://github.com/arduino/ArduinoCore-API.git
+[submodule "Arduino-Zephyr-API"]
+	path = Arduino-Zephyr-API
+	url = https://github.com/ddeletic/gsoc-2022-arduino-core
