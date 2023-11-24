@@ -16,6 +16,39 @@
 
 #-------------------------------------------------------------------------------
 #
+# Command line parameters
+#
+REBUILD=0
+SKIP_SDK=0
+while [[ $# -gt 0 ]]; do
+	case $1 in
+		-r|--rebuild)
+			REBUILD=1
+			shift # past argument
+		;;
+		-s|--skip-sdk)
+			SKIP_SDK=1
+			shift # past argument
+		;;
+		-h|--help)
+			echo Usage: $(basename $0) [options]
+			echo -e '       '-r, --rebuild\\t\\t rebuild the package
+			echo -e '       '-s, --skip-sdk\\t\\t skip copying SDK
+			exit
+		;;
+		-*|--*)
+			echo "Unknown option $1"
+			exit 1
+		;;
+	esac
+done
+if [ ${REBUILD} -ne 0 ]; then
+	SKIP_SDK=0
+fi
+
+
+#-------------------------------------------------------------------------------
+#
 # Setup paths
 #
 MY_DIR=$(realpath $(dirname $0))
@@ -55,6 +88,11 @@ if [ ! -d "${SAMPLE_DIR}/build/zephyr/include/generated" ]; then
 	echo '       Please build sample_zephyr_project zephyr and try again.'
 	exit
 fi
+if [ ${REBUILD} -ne 0 ]; then
+	echo Rebuilding...
+	rm -rf ${HARDWARE_DIR}/inc
+	rm -rf ${HARDWARE_DIR}/lib
+fi
 
 
 #-------------------------------------------------------------------------------
@@ -73,8 +111,13 @@ function copy_tool ()
 	cp --recursive --update "${SRC_DIR}"/* ${DST_DIR}
 } 
 
-copy_tool "${ZEPHYR_TOOLKIT_SRC_DIR}"	"${ZEPHYR_TOOLKIT_DST_DIR}"
-copy_tool "${NRFJPROG_SRC_DIR}"			"${NRFJPROG_DST_DIR}"
+if [ ${REBUILD} -ne 0 ]; then
+	copy_tool "${ZEPHYR_TOOLKIT_SRC_DIR}"	"${ZEPHYR_TOOLKIT_DST_DIR}"
+	copy_tool "${NRFJPROG_SRC_DIR}"			"${NRFJPROG_DST_DIR}"
+else
+    echo IMPORTANT: Skipping toolchains. Assuming they have already been prepared.
+fi
+
 if [ ! -d "${GEN_ISR_TABLES_DST_DIR}" ]; then
 	mkdir -p "${GEN_ISR_TABLES_DST_DIR}"
 
@@ -116,7 +159,7 @@ rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v8*.base
 # Usage: copy_headers <source_directory> <destination> [--recursive]
 function copy_headers() 
 {
-	#echo "$1"
+	#echo '   '"$1"
 
 	mkdir -p "$2"
 	cp $3 --update $1 "$2"
