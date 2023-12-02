@@ -22,12 +22,51 @@ version=1.0.0
 
 #####################################################
 # TODO:
-#	- debugging
+#	- arduino debugging
 
 ################################################################################
 # Paths 
-zephyr.path={runtime.platform.path}/inc/zephyrproject
+inc.path={runtime.platform.path}/inc
+
+
+
+################################################################################
+# Tools
 compiler.path={runtime.tools.arm-zephyr-eabi.path}/bin
+compiler.cpp.cmd=arm-zephyr-eabi-g++.exe
+compiler.c.cmd=arm-zephyr-eabi-gcc.exe
+compiler.ar.cmd=arm-zephyr-eabi-ar
+compiler.c.elf.cmd=arm-zephyr-eabi-g++
+compiler.elf2bin.cmd=arm-zephyr-eabi-objcopy
+
+
+
+################################################################################
+# Compiler flags
+compiler.defines=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -DNRF_TRUSTZONE_NONSECURE -DPICOLIBC_DOUBLE_PRINTF_SCANF -DTFM_PSA_API -DUSE_PARTITION_MANAGER=1 -D_FORTIFY_SOURCE=1 -D_POSIX_C_SOURCE=200809 -D__LINUX_ERRNO_EXTENSIONS__ -D__PROGRAM_START -D__ZEPHYR__=1 
+
+compiler.options=-fno-strict-aliasing -Os -fcheck-new -fno-exceptions -fno-common -g -gdwarf-4 -fno-diagnostics-color -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections --specs=picolibc.specs 
+
+compiler.c.flags={compiler.defines} {compiler.options}
+compiler.cpp.flags={compiler.c.flags} -std=c++11 -fno-rtti -nostdinc++ 
+
+################################################################################
+# Compiler include paths
+compiler.include.paths.generated="-I{inc.path}/generated/nrf" "-I{inc.path}/generated/tfm" "-I{inc.path}/generated/zephyr" 
+
+compiler.include.paths.arduino="-I{inc.path}/Arduino-Zephyr-API/cores/arduino" "-I{inc.path}/Arduino-Zephyr-API/variants" "-I{inc.path}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160" "-I{inc.path}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160_ns" "-I{inc.path}/Arduino-Zephyr-API/libraries/Wire" 
+
+compiler.include.paths.zephyr="-I{inc.path}/zephyr/include" "-I{inc.path}/zephyr/modules/cmsis" "-I{inc.path}/zephyr/modules/hal_nordic/nrfx" "-I{inc.path}/zephyr/soc/arm/nordic_nrf/common" "-I{inc.path}/zephyr/soc/arm/nordic_nrf/nrf91" "-I{inc.path}/zephyr/subsys/net/lib/sockets" 
+
+compiler.include.paths.nrf="-I{inc.path}/nrf/include" "-I{inc.path}/nrf/include/tfm" "-I{inc.path}/nrf/subsys/nrf_security/include" "-I{inc.path}/nrfxlib/nrf_modem/include" "-I{inc.path}/modules/hal/cmsis/CMSIS/Core/Include" "-I{inc.path}/modules/hal/nordic/nrfx" "-I{inc.path}/modules/hal/nordic/nrfx/drivers/include" "-I{inc.path}/modules/hal/nordic/nrfx/mdk" 
+
+compiler.include.paths.tfm="-I{inc.path}/tfm/install/interface/include"
+
+compiler.include.paths.system=-isystem "{inc.path}/zephyr/lib/cpp/minimal/include" 
+
+compiler.macros=-imacros "{inc.path}/generated/zephyr/autoconf.h" -imacros "{inc.path}/zephyr/include/zephyr/toolchain/zephyr_stdint.h" 
+
+compiler.cpp.include={compiler.include.paths.generated} {compiler.include.paths.arduino} {compiler.include.paths.zephyr} {compiler.include.paths.nrf} {compiler.include.paths.tfm} {compiler.include.paths.system} {compiler.macros}
 
 
 
@@ -36,40 +75,16 @@ compiler.path={runtime.tools.arm-zephyr-eabi.path}/bin
 preproc.macros.flags=-w -x c++ -E -C
 recipe.preproc.macros="{compiler.path}/{compiler.cpp.cmd}" {compiler.cpp.flags} {preproc.macros.flags} {compiler.cpp.include} --sysroot={compiler.path}/.. "{source_file}" -o "{preprocessed_file_path}"
 
-
-
 ################################################################################
 # C++ Compile 
-compiler.cpp.cmd=arm-zephyr-eabi-g++.exe
-
-compiler.cpp.flags=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -DPICOLIBC_DOUBLE_PRINTF_SCANF -D_FORTIFY_SOURCE=1 -D_POSIX_C_SOURCE=200809 -D__LINUX_ERRNO_EXTENSIONS__ -D__PROGRAM_START -D__ZEPHYR__=1 -fno-strict-aliasing -Os -fcheck-new -std=c++11 -fno-exceptions -fno-rtti -fno-common -g -gdwarf-4 -fdiagnostics-color=always -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections -nostdinc -nostdinc++ -Wno-unused-variable -Wno-comment -fno-diagnostics-color
-
-compiler.include.paths="-I{runtime.platform.path}/inc/generated" "-I{zephyr.path}/zephyr/include"  "-I{zephyr.path}/zephyr/soc/arm/nordic_nrf/nrf91" "-I{zephyr.path}/zephyr/soc/arm/nordic_nrf/common" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/cores/arduino" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/variants" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160" "-I{zephyr.path}/modules/lib/Arduino-Zephyr-API/libraries/Wire" "-I{zephyr.path}/modules/hal/cmsis/CMSIS/Core/Include" "-I{zephyr.path}/zephyr/modules/cmsis" "-I{zephyr.path}/modules/hal/nordic/nrfx" "-I{zephyr.path}/modules/hal/nordic/nrfx/drivers/include" "-I{zephyr.path}/modules/hal/nordic/nrfx/mdk" "-I{zephyr.path}/zephyr/modules/hal_nordic/nrfx"
-
-compiler.system_include.paths=-isystem "{zephyr.path}/zephyr/lib/cpp/minimal/include" 
-
-compiler.macro.paths=-imacros "{runtime.platform.path}/inc/generated/autoconf.h" -imacros "{zephyr.path}/zephyr/include/zephyr/toolchain/zephyr_stdint.h" 
-
-compiler.cpp.include={compiler.include.paths} {compiler.system_include.paths} {compiler.macro.paths}
-
-
 recipe.cpp.o.pattern="{compiler.path}/{compiler.cpp.cmd}" {compiler.cpp.flags} {compiler.cpp.include} --sysroot={compiler.path}/.. -o "{object_file}" -c "{source_file}" 
-
-
 
 ################################################################################
 # C Compile
-compiler.c.cmd=arm-zephyr-eabi-gcc.exe
-
-compiler.c.flags=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -D__PROGRAM_START -D__ZEPHYR__=1 -fno-strict-aliasing -Os -fcheck-new -fno-exceptions -fno-common -g -gdwarf-4 -fdiagnostics-color=always -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections -nostdinc  -Wno-unused-variable -Wno-comment
-
 recipe.c.o.pattern="{compiler.path}/{compiler.c.cmd}" {compiler.c.flags} {compiler.cpp.include} --sysroot={compiler.path}/.. -o "{object_file}" -c "{source_file}" 
-
-
 
 ################################################################################
 # Archive 
-compiler.ar.cmd=arm-zephyr-eabi-ar
 compiler.ar.flags=rcs
 recipe.ar.pattern="{compiler.path}/{compiler.ar.cmd}" {compiler.ar.flags} "{archive_file_path}" "{object_file}"
 
@@ -88,28 +103,24 @@ recipe.hooks.linking.prelink.2.pattern.windows=cmd /c dir /b /s "{build.path}\sk
 # replace all \ with \\ in obj_files_tmp.txt
 recipe.hooks.linking.prelink.3.pattern.windows=cmd /v /c "@echo off && for /f %a in ({build.path}\obj_files_tmp.txt) do (set line=%a && set line=!line:\=\\! && echo !line! >> {build.path}\obj_files.txt)"
 
-
 ################################################################################
 # Link 
-compiler.c.elf.cmd=arm-zephyr-eabi-g++
-compiler.elf2bin.cmd=arm-zephyr-eabi-objcopy
-
 libs.path={runtime.platform.path}/lib
 
-linker.flags=-gdwarf-4 -fuse-ld=bfd -Wl,-Map={build.path}/{build.project_name}.map -Wl,-no-pie -Wl,--orphan-handling=warn -Wl,-u,_ConfigAbsSyms -Wl,-u,_OffsetAbsSyms -nostdlib -static -Wl,-X -Wl,-N -Wl,--gc-sections -Wl,--build-id=none -Wl,--sort-common=descending -Wl,--sort-section=alignment -mfp16-format=ieee -mabi=aapcs -mthumb -mcpu={build.mcu}
+linker.flags=-gdwarf-4 -fuse-ld=bfd -Wl,-Map={build.path}/{build.project_name}.map -Wl,-no-pie -Wl,--orphan-handling=warn -Wl,-u,_ConfigAbsSyms -Wl,-u,_OffsetAbsSyms -DPICOLIBC_DOUBLE_PRINTF_SCANF  -nostdlib -static -Wl,-X -Wl,-N -Wl,--gc-sections -Wl,--build-id=none -Wl,--sort-common=descending -Wl,--sort-section=alignment -mfp16-format=ieee -mabi=aapcs -mthumb -mcpu={build.mcu} --specs=picolibc.specs 
 
-linker.precompiled_objects="{libs.path}/empty_file.c.obj" "{libs.path}/offsets.c.obj"
-linker.whole_archives= "{libs.path}/libzephyr.a" "{libs.path}/libarch__common.a"  "{libs.path}/libarch__arm__core__aarch32.a" "{libs.path}/libarch__arm__core__aarch32__cortex_m.a" "{libs.path}/libarch__arm__core__aarch32__cortex_m__cmse.a"  "{libs.path}/libarch__arm__core__aarch32__mpu.a" "{libs.path}/liblib__libc__minimal.a" "{libs.path}/liblib__libc__common.a"  "{libs.path}/libsoc__arm__common__cortex_m.a"  "{libs.path}/libboards__arm__nrf9160dk_nrf9160.a" "{libs.path}/libdrivers__adc.a" "{libs.path}/libdrivers__clock_control.a" "{libs.path}/libdrivers__console.a" "{libs.path}/libdrivers__gpio.a" "{libs.path}/libdrivers__i2c.a" "{libs.path}/libdrivers__pinctrl.a" "{libs.path}/libdrivers__serial.a" "{libs.path}/libdrivers__timer.a" "{libs.path}/libmodules__hal_nordic__nrfx.a"
+linker.precompiled_objects="{libs.path}/empty_file.c.obj" "{libs.path}/offsets.c.obj" "{libs.path}/s_veneers.o"
 
-linker.partial_archives="{libs.path}/libkernel.a" "{libs.path}/libisr_tables.a" "{libs.path}/libgcc.a" 
-
-#-------------------------------------------------------------------------------
-# Link - 1st pass
-recipe.c.combine.pattern="{compiler.path}/{compiler.c.elf.cmd}" {linker.flags} -T {libs.path}/linker_pre0.cmd {linker.precompiled_objects} {object_files} -Wl,--whole-archive {linker.whole_archives} -Wl,--no-whole-archive {linker.partial_archives} -o "{build.path}/{build.project_name}.pre0.elf" 
+linker.whole_archives= "{libs.path}/libzephyr.a" "{libs.path}/libarch__common.a"  "{libs.path}/libarch__arm__core__aarch32.a" "{libs.path}/libarch__arm__core__aarch32__cortex_m.a" "{libs.path}/libarch__arm__core__aarch32__cortex_m__cmse.a"  "{libs.path}/libarch__arm__core__aarch32__mpu.a" "{libs.path}/liblib__libc__picolibc.a" "{libs.path}/liblib__libc__common.a"  "{libs.path}/libsoc__arm__common__cortex_m.a"  "{libs.path}/libboards__arm__nrf9160dk_nrf9160.a" "{libs.path}/libsubsys__random.a" "{libs.path}/libsubsys__net.a" "{libs.path}/libsubsys__net__l2__offloaded_netdev.a" "{libs.path}/libsubsys__net__ip.a" "{libs.path}/libdrivers__adc.a" "{libs.path}/libdrivers__clock_control.a" "{libs.path}/libdrivers__console.a" "{libs.path}/libdrivers__gpio.a" "{libs.path}/libdrivers__i2c.a" "{libs.path}/libdrivers__pinctrl.a" "{libs.path}/libdrivers__serial.a" "{libs.path}/libdrivers__timer.a" "{libs.path}/lib..__nrf__lib__nrf_modem_lib.a" "{libs.path}/lib..__nrf__lib__at_monitor.a" "{libs.path}/lib..__nrf__lib__at_host.a" "{libs.path}/lib..__nrf__lib__fatal_error.a" "{libs.path}/lib..__nrf__lib__modem_antenna.a" "{libs.path}/libtfm_api_nrf.a" "{libs.path}/libtfm_api.a" "{libs.path}/libmodules__hal_nordic__nrfx.a" "{libs.path}/libmodem.a" 
+	
+linker.partial_archives="{libs.path}/libkernel.a" "{libs.path}/libisr_tables.a" 
 
 #-------------------------------------------------------------------------------
-# Post-link
+# Link - 1st pass (<project_name>.pre0.elf)
+recipe.c.combine.pattern="{compiler.path}/{compiler.c.elf.cmd}" {linker.flags} -T {libs.path}/linker_pre0.cmd {linker.precompiled_objects} {object_files} -Wl,--whole-archive {linker.whole_archives} -Wl,--no-whole-archive {linker.partial_archives} -lc -lgcc -o "{build.path}/{build.project_name}.pre0.elf" 
 
+#-------------------------------------------------------------------------------
+# isr_table
 # Extract isr_table.bin from {build.project_name}.pre0.elf
 recipe.hooks.linking.postlink.2.pattern="{compiler.path}/{compiler.elf2bin.cmd}" --input-target=elf32-littlearm --output-target=binary --only-section=.intList "{build.path}/{build.project_name}.pre0.elf" "{build.path}/isr_table.bin" 
 
@@ -119,8 +130,9 @@ recipe.hooks.linking.postlink.3.pattern.windows="{runtime.tools.gen_isr_tables.p
 # Compile isr_table.c
 recipe.hooks.linking.postlink.4.pattern="{compiler.path}/{compiler.c.cmd}" {compiler.c.flags} {compiler.cpp.include} --sysroot={compiler.path}/.. -o "{build.path}/isr_table.c.obj" -c "{build.path}/isr_table.c"
 
+#-------------------------------------------------------------------------------
 # Final Link
-recipe.hooks.linking.postlink.5.pattern="{compiler.path}/{compiler.c.elf.cmd}" {linker.flags} -Wl,--print-memory-usage -T {libs.path}/linker.cmd @{build.path}/obj_files.txt {linker.precompiled_objects} "{build.path}/isr_table.c.obj" -Wl,--whole-archive {linker.whole_archives} -Wl,--no-whole-archive {linker.partial_archives} -o "{build.path}/{build.project_name}.elf"
+recipe.hooks.linking.postlink.5.pattern="{compiler.path}/{compiler.c.elf.cmd}" {linker.flags} -Wl,--print-memory-usage -T {libs.path}/linker.cmd @{build.path}/obj_files.txt {linker.precompiled_objects} "{build.path}/isr_table.c.obj" -Wl,--whole-archive {linker.whole_archives} -Wl,--no-whole-archive {linker.partial_archives} -lgcc -lc -o "{build.path}/{build.project_name}.elf"
 
 
 ################################################################################
@@ -130,11 +142,18 @@ recipe.objcopy.eep.pattern="{compiler.path}/{compiler.elf2bin.cmd}" {compiler.el
 
 
 ################################################################################
-# elf => hex
+# elf => pre0.hex
 compiler.elf2hex.cmd=arm-zephyr-eabi-objcopy
 compiler.elf2hex.flags=--gap-fill 0xff --output-target=ihex --remove-section=.comment --remove-section=COMMON --remove-section=.eh_frame
-recipe.objcopy.hex.pattern="{compiler.path}/{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.hex"
+recipe.objcopy.hex.pattern="{compiler.path}/{compiler.elf2hex.cmd}" {compiler.elf2hex.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}_pre0.hex"
 
+#-------------------------------------------------------------------------------
+# tfm_nonsecure.hex
+recipe.hooks.objcopy.postobjcopy.1.pattern="{runtime.tools.mergehex.path}/mergehex.exe" -o {build.path}/tfm_nonsecure.hex {build.path}/{build.project_name}_pre0.hex
+
+#-------------------------------------------------------------------------------
+# hex
+recipe.hooks.objcopy.postobjcopy.2.pattern="{runtime.tools.mergehex.path}/mergehex.exe" -o {build.path}/{build.project_name}.hex --overlap=replace {libs.path}/tfm_secure.hex {build.path}/tfm_nonsecure.hex {libs.path}/tfm_s.hex {build.path}/{build.project_name}_pre0.hex
 
 ################################################################################
 # Sketch size
