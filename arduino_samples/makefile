@@ -61,7 +61,7 @@ m:
 		--fqbn bosl:nrf9160:nrf9160dk modem_at_monitor/modem_at_monitor.ino
 clean_m:
 	rm -rf modem_at_monitor/build
-prog_b:
+prog_m:
 	nrfjprog --program modem_at_monitor/build/modem_at_monitor.ino.hex --chiperase --verify --pinreset
 
 

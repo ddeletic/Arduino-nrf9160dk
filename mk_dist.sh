@@ -63,8 +63,7 @@ function write_archive_data ()
 #
 echo Creating json...
 JSON_FNAME=package_bosl_nrf9160dk_index.json
-JSON_TEMPLATE_SUFFIX=template
-cp ${MY_DIR}/${JSON_FNAME}.${JSON_TEMPLATE_SUFFIX}	${MY_DIR}/dist/${JSON_FNAME}
+cp ${MY_DIR}/templates/${JSON_FNAME}.template	${MY_DIR}/dist/${JSON_FNAME}
 
 write_archive_data PLATFORM			${MY_DIR}/dist/${PLATFORM_ARCHIVE_NAME}			${MY_DIR}/dist/${JSON_FNAME}
 write_archive_data GEN_ISR_TABLES	${MY_DIR}/dist/${GEN_ISR_TABLES_ARCHIVE_NAME}	${MY_DIR}/dist/${JSON_FNAME}

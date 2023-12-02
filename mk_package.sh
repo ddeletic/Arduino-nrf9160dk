@@ -135,6 +135,17 @@ if [ ${REBUILD} -ne 0 ]; then
 	rm -rf ${HARDWARE_DIR}/lib
 fi
 
+
+
+
+#-------------------------------------------------------------------------------
+#
+# Statics
+#
+mkdir -p bosl/hardware/nrf9160/1.0.0/
+cp --update 			templates/*.txt bosl/hardware/nrf9160/1.0.0/
+cp --update --recursive templates/cores bosl/hardware/nrf9160/1.0.0/
+
 #-------------------------------------------------------------------------------
 #
 # Copy tools
