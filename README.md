@@ -4,47 +4,49 @@ This project aims to provide Arduino Board Support Package (BSP) for Nordic nRF9
 
 Currently the BSP only supports Windows Arduino host, as well as Windows as development host.
 
-## Board Support Package Overview
+## Overview
 
 The Board Support Package (BSP) comprises:
 - Platform definition required for Arduino (see https://arduino.github.io/arduino-cli/0.34/platform-specification/)
 - Header files and libraries required to build Arduino sketches
-- Tools required to compile, link and download sketches to the board
-Creating a working BSP relies on libraries precompiled on Zephyr, as well as Zephyr SDK.
+- Tools required to compile, link, post process and download sketches to the board
+Creating a working BSP relies on libraries precompiled by the Nordic nRF SDK.
 
 ## Prerequisites
 
 Before the BSP can be built, several prerequisites have to be met:
-- Nordic command line tools (https://www.nordicsemi.com/Products/Development-tools/nRF-Command-Line-Tools) have to be installed on the host machine, preferably in it's default location (C:\Program Files\Nordic Semiconductor\nrf-command-line-tools).
-- CMake, Python, 7zip and Devicetree compiler are required. See https://docs.zephyrproject.org/latest/develop/getting_started/index.html for details.
+- Nordic nRF SDK, preferably in the default location (C:\ncs\). Tested with v2.5.0.
+- Nordic command line tools (https://www.nordicsemi.com/Products/Development-tools/nRF-Command-Line-Tools) have to be installed on the host machine, preferably in the default location (C:\Program Files\Nordic Semiconductor\nrf-command-line-tools).
+- CMake, Python, 7zip and Devicetree compiler may be required if not included in the nRF SDK. See https://docs.zephyrproject.org/latest/develop/getting_started/index.html for details.
 - A version of Linux command line shell for Windows (e.g. GitBash) is necessary to build the BSP.
-
-## Setup (once only)
-
-Run `setup.sh` and ensure it completes successfully. This will:
-- download and setup Zephyr SDK (compiler, linker, etc)
-- download and setup Zephyr and all required modules
-- build `sample_zephyr_project`
-
-It may be a good idea to have a good, healthy meal at this point as setup performs a lot of downloading and setting up. Just be aware that it may prompt for answers here and there.
-
-When it completes successfully, it will display Memory Usage for the built sample_zephyr_project app.
+- Optionally, for quick and easy testing, Arduino Command line tool is required (download from https://arduino.github.io/arduino-cli/0.35/installation/#latest-release)
 
 ## Board Support Package Generation
 
-1. Execute `prepare_package.sh`. This will collect all the necessary headers and libraries, as well as tools required into the required directory structure (and place them into `bosl` directory).
-2. Execute `mk_dist.sh`. This will generate a JSON file and a number of .tar.gz archives ready for distribution, and place them into `dist` directory.
+Quick steps:
 
-## Board Support Package Distribution
+1. Open a GitBash shell
+2. `source ./env.sh`
+3. `make z`
+4. `make pack`
+5. `make dist`
+
+See Maintenance.md for details. 
+
+### Testing
+
+Arduino sketches can be created an dtested in Arduino IDE, but a quick way to test the BSP is to run `make build_arduino`.
+
+## Distribution
 
 ### Local
 
 If you only want to test the BSP on your local machine:
 
 - If 'BoSL nRF9160dk' BSP had been installed in Arduino, remove it
-- Execute `local_install.sh`
-- (re)Start Arduino IDE
-- In Arduino IDE, go to the board manager, search for 'bosl' and install the offered package.
+- Exit Arduino IDE
+- Execute `make copy`
+- Restart Arduino IDE
 - Build, download, run sketch
   
 ### Public
@@ -55,11 +57,14 @@ If you need to publish the BSP:
 - Adjust the paths to these files in the JSON file
 - Copy the JSON file to a location on the internet
 - Publish the link to the JSON
-- Users need to add the link to JSON in their Arduino IDE Preferences, under 'Additional boards manager URLs'
 
-## Using the BSP
+## Installing the BSP
 
-If you only want to use the BSP to create sketches for nRF9160dk board, in Arduino Preferences, add 'https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/package_bosl_nrf9160dk_index.json' to 'Additional boards manager URLs'. Save preferences.
+Once the BSP has been published, users have to add path to the json file to the list of additional packafe locations in Arduino preferences under 'Additional boards manager URLs'. This can be:
 
-Open the Board Manager and search for 'bosl'. Only one result will come up. Install and have fun.
+* a local file (e.g. [file:///C:/Users/%USERNAME%/Documents/bosl/dist/package_bosl_nrf9160dk_index.json]()) 
+* an URL (e.g. https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/package_bosl_nrf9160dk_index.json)
+
+Open the Board Manager and search for 'bosl'. Only one result will come up. Install (upgrade or remove) the BSP and have fun. 
+
 

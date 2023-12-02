@@ -11,9 +11,9 @@ test: qpack qcopy build_arduino
 
 
 
-pack: build_zephyr_sample
+pack: z
 	cd ${CURDIR} &&./mk_package.sh
-qpack: build_zephyr_samples
+qpack: z
 	cd ${CURDIR} && ./mk_package.sh -q
 
 copy:
@@ -22,9 +22,9 @@ qcopy:
 	cd ${CURDIR} &&./local_copy.sh -q
 build_arduino:
 	cd arduino_samples && $(MAKE)
-build_zephyr_sample: 
+z:
 	cd zephyr_samples && $(MAKE) a
-build_zephyr_samples: 
+z_all:
 	cd zephyr_samples && $(MAKE)
 
 dist:
