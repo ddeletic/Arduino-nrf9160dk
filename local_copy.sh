@@ -12,16 +12,12 @@ HIGHLIGHT='\e[30;48;5;41m'
 #
 # Command line parameters
 #
-REINSTALL=0
 STAGING=0
+QUICK=0
 while [[ $# -gt 0 ]]; do
 	case $1 in
 		-q|--quick)
 			QUICK=1
-			shift # past argument
-		;;
-		-r|--reinstall)
-			REINSTALL=1
 			shift # past argument
 		;;
 		-s|--staging)
@@ -31,7 +27,6 @@ while [[ $# -gt 0 ]]; do
 		-h|--help)
 			echo Usage: $(basename $0) [options]
 			echo -e '       '-q, --quick    \\t\\t quick, do not copy tools
-			echo -e '       '-r, --reinstall\\t\\t remove previous install
 			echo -e '       '-s, --staging  \\t\\t copy built distribution to local 
 			echo -e '       '               \\t\\t\\t Arduino staging area
 			exit
@@ -51,8 +46,7 @@ done
 MY_DIR=$(realpath $(dirname $0))
 
 
-BOSL_VERSION=1.0.0
-if [ ${REINSTALL} -eq 0 ]; then
+if [ ${QUICK} -eq 1 ]; then
 	# Only copy the hardware part, and skip tools 
 	PACKAGE_PATH=bosl/hardware/nrf9160/${BOSL_VERSION}
 else
@@ -77,10 +71,10 @@ DST_PATH=${ARDUINO_PATH}/packages/${PACKAGE_PATH}
 #
 cd ${MY_DIR}/${PACKAGE_PATH}
 
-if [ ${REINSTALL} -ne 0 ]; then
+if [ ${QUICK} -eq 0 ]; then
 	rm -rf ${DST_PATH}
-	mkdir -p ${DST_PATH}
 fi
+mkdir -p ${DST_PATH}
 
 echo -e ${GREEN}Copying BoSL package into Arduino package area.${NORMAL}
 cp --recursive * ${DST_PATH}

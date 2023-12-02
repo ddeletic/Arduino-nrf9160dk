@@ -55,6 +55,11 @@ if [ ${REBUILD} -ne 0 ]; then
 fi
 
 
+echo -e ${GREEN}
+echo Building BoSL Arduino Package
+echo -e ${NORMAL}
+
+
 #-------------------------------------------------------------------------------
 #
 # Setup paths
@@ -67,7 +72,7 @@ SAMPLE_DIR=${MY_DIR}/zephyr_samples/at_client/build
 NRFJPROG_SRC_DIR="/c/Program Files/Nordic Semiconductor/nrf-command-line-tools"
 ZEPHYR_BASE="${ZEPHYR_BASE//\\//}"
 
-HARDWARE_DST_DIR=${MY_DIR}/bosl/hardware/nrf9160/1.0.0
+HARDWARE_DST_DIR=${MY_DIR}/bosl/hardware/nrf9160/${BOSL_VERSION}
 ZEPHYR_TOOLKIT_DST_DIR=${MY_DIR}/bosl/tools/arm-zephyr-eabi/12.2.0
 NRFJPROG_DST_DIR=${MY_DIR}/bosl/tools/nrfjprog/10.22.1
 GEN_ISR_TABLES_DST_DIR=${MY_DIR}/bosl/tools/gen_isr_tables/0.0.0
@@ -142,9 +147,10 @@ fi
 #
 # Statics
 #
-mkdir -p bosl/hardware/nrf9160/1.0.0/
-cp --update 			templates/*.txt bosl/hardware/nrf9160/1.0.0/
-cp --update --recursive templates/cores bosl/hardware/nrf9160/1.0.0/
+mkdir -p ${HARDWARE_DST_DIR}
+cp --update 			templates/*.txt ${HARDWARE_DST_DIR}
+cp --update --recursive templates/cores ${HARDWARE_DST_DIR}
+sed -i -e "s-x_y_z-${BOSL_VERSION}-"	${HARDWARE_DST_DIR}/platform.txt
 
 #-------------------------------------------------------------------------------
 #

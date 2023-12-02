@@ -13,7 +13,7 @@
 					{"name": "nrf9160dk"}
 				],
 				"architecture": "nrf9160",
-				"version": "1.0.0",
+				"version": "x_y_z",
 				"category": "Contributed",
 				"help": {
 					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
@@ -25,6 +25,7 @@
 				"toolsDependencies": [
 					{ "packager": "bosl", "name": "arm-zephyr-eabi","version": "12.2.0" },
 					{ "packager": "bosl", "name": "gen_isr_tables",	"version": "0.0.0" },
+					{ "packager": "bosl", "name": "mergehex",		"version": "0.0.0" },
 					{ "packager": "bosl", "name": "nrfjprog",		"version": "10.22.1" }
 				]
 			}
@@ -51,6 +52,17 @@
 					"archiveFileName": "__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
 					"size": "__GEN_ISR_TABLES_ARCHIVE_SIZE__",
 					"checksum": "MD5:__GEN_ISR_TABLES_ARCHIVE_CHECKSUM__"
+				}]
+			},
+			{
+				"name": "mergehex",
+				"version": "0.0.0",
+				"systems": [{
+					"host": "i686-mingw32",
+					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__MERGEHEX_ARCHIVE_FILENAME__",
+					"archiveFileName": "__MERGEHEX_ARCHIVE_FILENAME__",
+					"size": "__MERGEHEX_ARCHIVE_SIZE__",
+					"checksum": "MD5:__MERGEHEX_ARCHIVE_CHECKSUM__"
 				}]
 			},
 			{
