@@ -1,0 +1,5 @@
+{
+    "name": "BoSL NRF9160",
+    "device": "nrf9160",
+    "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL.exe"
+}

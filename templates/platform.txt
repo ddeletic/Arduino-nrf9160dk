@@ -20,14 +20,10 @@ name=BOSL Boards
 version=x_y_z
 
 
-#####################################################
-# TODO:
-#	- arduino debugging
-
 ################################################################################
 # Paths 
 inc.path={runtime.platform.path}/inc
-
+libs.path={runtime.platform.path}/lib
 
 
 ################################################################################
@@ -40,12 +36,15 @@ compiler.c.elf.cmd=arm-zephyr-eabi-g++
 compiler.elf2bin.cmd=arm-zephyr-eabi-objcopy
 
 
-
 ################################################################################
 # Compiler flags
 compiler.defines=-DKERNEL -DNRF9160_XXAA -DNRF_SKIP_FICR_NS_COPY_TO_RAM -DNRF_TRUSTZONE_NONSECURE -DPICOLIBC_DOUBLE_PRINTF_SCANF -DTFM_PSA_API -DUSE_PARTITION_MANAGER=1 -D_FORTIFY_SOURCE=1 -D_POSIX_C_SOURCE=200809 -D__LINUX_ERRNO_EXTENSIONS__ -D__PROGRAM_START -D__ZEPHYR__=1 
 
-compiler.options=-fno-strict-aliasing -Os -fcheck-new -fno-exceptions -fno-common -g -gdwarf-4 -fno-diagnostics-color -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections --specs=picolibc.specs 
+compiler.optimization_flags=-Os
+compiler.optimization_flags.release=-Os
+compiler.optimization_flags.debug=-Og -g3
+
+compiler.options=-fno-strict-aliasing {compiler.optimization_flags} -fcheck-new -fno-exceptions -fno-common -g -gdwarf-4 -fno-diagnostics-color -mcpu=cortex-m33 -mthumb -mabi=aapcs -mfp16-format=ieee -Wall -Wformat -Wformat-security -Wno-format-zero-length -Wpointer-arith -Wexpansion-to-defined -Wno-unused-but-set-variable -fno-pic -fno-pie -fno-asynchronous-unwind-tables -ftls-model=local-exec -fno-reorder-functions --param=min-pagesize=0 -fno-defer-pop -ffunction-sections -fdata-sections --specs=picolibc.specs 
 
 compiler.c.flags={compiler.defines} {compiler.options}
 compiler.cpp.flags={compiler.c.flags} -std=c++11 -fno-rtti -nostdinc++ 
@@ -67,7 +66,6 @@ compiler.include.paths.system=-isystem "{inc.path}/zephyr/lib/cpp/minimal/includ
 compiler.macros=-imacros "{inc.path}/generated/zephyr/autoconf.h" -imacros "{inc.path}/zephyr/include/zephyr/toolchain/zephyr_stdint.h" 
 
 compiler.cpp.include={compiler.include.paths.generated} {compiler.include.paths.arduino} {compiler.include.paths.zephyr} {compiler.include.paths.nrf} {compiler.include.paths.tfm} {compiler.include.paths.system} {compiler.macros}
-
 
 
 ################################################################################
@@ -105,8 +103,6 @@ recipe.hooks.linking.prelink.3.pattern.windows=cmd /v /c "@echo off && for /f %a
 
 ################################################################################
 # Link 
-libs.path={runtime.platform.path}/lib
-
 linker.flags=-gdwarf-4 -fuse-ld=bfd -Wl,-Map={build.path}/{build.project_name}.map -Wl,-no-pie -Wl,--orphan-handling=warn -Wl,-u,_ConfigAbsSyms -Wl,-u,_OffsetAbsSyms -DPICOLIBC_DOUBLE_PRINTF_SCANF  -nostdlib -static -Wl,-X -Wl,-N -Wl,--gc-sections -Wl,--build-id=none -Wl,--sort-common=descending -Wl,--sort-section=alignment -mfp16-format=ieee -mabi=aapcs -mthumb -mcpu={build.mcu} --specs=picolibc.specs 
 
 linker.precompiled_objects="{libs.path}/empty_file.c.obj" "{libs.path}/offsets.c.obj" "{libs.path}/s_veneers.o"
@@ -134,14 +130,7 @@ recipe.hooks.linking.postlink.4.pattern="{compiler.path}/{compiler.c.cmd}" {comp
 # Final Link
 recipe.hooks.linking.postlink.5.pattern="{compiler.path}/{compiler.c.elf.cmd}" {linker.flags} -Wl,--print-memory-usage -T {libs.path}/linker.cmd @{build.path}/obj_files.txt {linker.precompiled_objects} "{build.path}/isr_table.c.obj" -Wl,--whole-archive {linker.whole_archives} -Wl,--no-whole-archive {linker.partial_archives} -lgcc -lc -o "{build.path}/{build.project_name}.elf"
 
-
-################################################################################
-# elf => bin
-compiler.elf2bin.flags=--gap-fill 0xff --output-target=binary --remove-section=.comment --remove-section=COMMON --remove-section=.eh_frame
-recipe.objcopy.eep.pattern="{compiler.path}/{compiler.elf2bin.cmd}" {compiler.elf2bin.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
-
-
-################################################################################
+#-------------------------------------------------------------------------------
 # elf => pre0.hex
 compiler.elf2hex.cmd=arm-zephyr-eabi-objcopy
 compiler.elf2hex.flags=--gap-fill 0xff --output-target=ihex --remove-section=.comment --remove-section=COMMON --remove-section=.eh_frame
@@ -155,12 +144,30 @@ recipe.hooks.objcopy.postobjcopy.1.pattern="{runtime.tools.mergehex.path}/mergeh
 # hex
 recipe.hooks.objcopy.postobjcopy.2.pattern="{runtime.tools.mergehex.path}/mergehex.exe" -o {build.path}/{build.project_name}.hex --overlap=replace {libs.path}/tfm_secure.hex {build.path}/tfm_nonsecure.hex {libs.path}/tfm_s.hex {build.path}/{build.project_name}_pre0.hex
 
+#-------------------------------------------------------------------------------
+# debug_custom.json
+recipe.hooks.objcopy.postobjcopy.3.pattern.windows=cmd /v /c copy "{runtime.platform.path}\debug_custom.json" "{build.path}"
+
+
 ################################################################################
 # Sketch size
 compiler.size.cmd=arm-zephyr-eabi-size
 recipe.size.pattern="{compiler.path}/{compiler.size.cmd}" -A "{build.path}/{build.project_name}.hex"
 recipe.size.regex=^Total\s+([0-9]+)
 recipe.size.regex.data=
+
+
+################################################################################
+# elf => bin
+compiler.elf2bin.flags=--gap-fill 0xff --output-target=binary --remove-section=.comment --remove-section=COMMON --remove-section=.eh_frame
+recipe.objcopy.eep.pattern="{compiler.path}/{compiler.elf2bin.cmd}" {compiler.elf2bin.flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"
+
+
+################################################################################
+# Save hex
+build.preferred_out_format=hex
+recipe.output.tmp_file={build.project_name}.{build.preferred_out_format}
+recipe.output.save_file={build.project_name}.{build.variant}.{build.preferred_out_format}
 
 
 ################################################################################
@@ -174,52 +181,29 @@ tools.nrfjprog_isp.upload.params.quiet=--quiet
 tools.nrfjprog_isp.upload.pattern="{path}/{cmd}" {upload.verbose} --program "{build.path}/{build.project_name}.hex" --chiperase --verify --pinreset
 
 
-
-
-
-
 ################################################################################
-#																			   #
-#		    _/_/_/_/   _/_/_/_/_/ _/_/_/_/_/  _/_/_/_/  _/      _/			   #
-#		   _/      _/ _/                 _/ _/      _/ _/_/    _/			   #
-#		  _/      _/ _/_/_/             _/ _/_/_/_/_/ _/  _/  _/			   #
-#		 _/      _/ _/          _/     _/ _/      _/ _/    _/_/				   #
-#		_/_/_/_/   _/_/_/_/_/    _/_/_/  _/      _/ _/      _/				   #
-#																			   #
-################################################################################
+# Debug
+debug.name="BoSL nrf9160"
+debug.executable={build.path}/{build.project_name}.elf
+debug.toolchain.path={runtime.tools.gdb.path}
+debug.toolchain=gcc
+
+debug.device=nrf9160
+debug.server=jlink
+debug.interface=swd
 
 
 
 
 
+#############################################################################
+#																			#
+#		    _/_/_/_/   _/_/_/_/_/ _/_/_/_/_/  _/_/_/_/  _/      _/			#
+#		   _/      _/ _/                 _/ _/      _/ _/_/    _/			#
+#		  _/      _/ _/_/_/             _/ _/_/_/_/_/ _/  _/  _/			#
+#		 _/      _/ _/          _/     _/ _/      _/ _/    _/_/				#
+#		_/_/_/_/   _/_/_/_/_/    _/_/_/  _/      _/ _/      _/				#
+#																			#
+#############################################################################
 
-
-
-
-
-
-
-
-
-
-
-
-
-## Create merged hex file with softdevice and bootloader
-#recipe.objcopy.mergehex.pattern="{tools.mergehex.path}/{tools.mergehex.cmd}" --merge "{runtime.platform.path}/firmwares/{firmware.softdevice.file}" "{runtime.platform.path}/bootloaders/{bootloader.file}" "{build.path}/{build.project_name}.hex" --output "{build.path}/{build.project_name}-merged.hex" {tools.mergehex.upload.params.quiet}
-
-## Save hex
-recipe.output.tmp_file={build.project_name}.hex
-recipe.output.save_file={build.project_name}.{build.variant}.hex
-
-
-#
-# Merge Hex - nRF5x Command Line Tools
-# -------------------
-
-tools.mergehex.path={runtime.tools.nrf5x-cl-tools-9.3.1.path}
-tools.mergehex.cmd=mergehex/mergehex
-tools.mergehex.cmd.windows=bin/mergehex.exe
-tools.mergehex.upload.params.verbose=
-tools.mergehex.upload.params.quiet=--quiet
 

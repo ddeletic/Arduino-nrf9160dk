@@ -23,10 +23,11 @@
 				"size": "__PLATFORM_ARCHIVE_SIZE__",
 				"checksum": "MD5:__PLATFORM_ARCHIVE_CHECKSUM__",
 				"toolsDependencies": [
-					{ "packager": "bosl", "name": "arm-zephyr-eabi","version": "12.2.0" },
-					{ "packager": "bosl", "name": "gen_isr_tables",	"version": "0.0.0" },
-					{ "packager": "bosl", "name": "mergehex",		"version": "0.0.0" },
-					{ "packager": "bosl", "name": "nrfjprog",		"version": "10.22.1" }
+					{ "packager": "bosl", "name": "arm-zephyr-eabi",	"version": "12.2.0" },
+					{ "packager": "bosl", "name": "gen_isr_tables",		"version": "0.0.0" },
+					{ "packager": "bosl", "name": "mergehex",			"version": "0.0.0" },
+					{ "packager": "bosl", "name": "nrfjprog",			"version": "10.22.1" },
+					{ "packager": "bosl", "name": "arm-none-eabi-gdb",	"version": "13.2.90" }
 				]
 			},
 			{
@@ -48,27 +49,6 @@
 					{ "packager": "bosl", "name": "arm-zephyr-eabi","version": "12.2.0" },
 					{ "packager": "bosl", "name": "gen_isr_tables",	"version": "0.0.0" },
 					{ "packager": "bosl", "name": "mergehex",		"version": "0.0.0" },
-					{ "packager": "bosl", "name": "nrfjprog",		"version": "10.22.1" }
-				]
-			},
-			{
-				"name": "BoSL nRF9160 Boards",
-				"boards": [
-					{"name": "nrf9160dk"}
-				],
-				"architecture": "nrf9160",
-				"version": "1.0.0",
-				"category": "Contributed",
-				"help": {
-					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
-				},
-				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/bosl_nrf9160dk_v1.0.0.tar.gz",
-				"archiveFileName": "bosl_nrf9160dk_v1.0.0.tar.gz",
-				"size": "4799517",
-				"checksum": "MD5:f389f26cbc7367c7259104f7f170dc70",
-				"toolsDependencies": [
-					{ "packager": "bosl", "name": "arm-zephyr-eabi","version": "12.2.0" },
-					{ "packager": "bosl", "name": "gen_isr_tables",	"version": "0.0.0" },
 					{ "packager": "bosl", "name": "nrfjprog",		"version": "10.22.1" }
 				]
 			}
@@ -117,6 +97,17 @@
 					"archiveFileName": "__NRFJPROG_ARCHIVE_FILENAME__",
 					"size": "__NRFJPROG_ARCHIVE_SIZE__",
 					"checksum": "MD5:__NRFJPROG_ARCHIVE_CHECKSUM__"
+				}]
+			},
+			{
+				"name": "arm-none-eabi-gdb",
+				"version": "13.2.90",
+				"systems": [{
+					"host": "i686-mingw32",
+					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__GDB_ARCHIVE_FILENAME__",
+					"archiveFileName": "__GDB_ARCHIVE_FILENAME__",
+					"size": "__GDB_ARCHIVE_SIZE__",
+					"checksum": "MD5:__GDB_ARCHIVE_CHECKSUM__"
 				}]
 			}
 		]

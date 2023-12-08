@@ -77,6 +77,7 @@ ZEPHYR_TOOLKIT_DST_DIR=${MY_DIR}/bosl/tools/arm-zephyr-eabi/12.2.0
 NRFJPROG_DST_DIR=${MY_DIR}/bosl/tools/nrfjprog/10.22.1
 GEN_ISR_TABLES_DST_DIR=${MY_DIR}/bosl/tools/gen_isr_tables/0.0.0
 MERGEHEX_DST_DIR=${MY_DIR}/bosl/tools/mergehex/0.0.0
+GDB_DST_DIR=${MY_DIR}/bosl/tools/gdb/13.2.90
 
 
 # NOTE: NRFJPROG_SRC_DIR points to a directory residing outside of this project. 
@@ -183,6 +184,27 @@ rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/nofp
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v6*
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v7*
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v8*.base
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-addr*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-as*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-c++*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ct*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-elfedit*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcc-*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcov*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gdb*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gprof*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ld.bfd*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-lto*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-nm*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-objdump*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-r*
+rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-st*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/share
+# We don't need the whole nrfjprog either
+rm     "${NRFJPROG_DST_DIR}"/*_release_notes.txt
+rm -rf "${NRFJPROG_DST_DIR}"/lib
+rm -rf "${NRFJPROG_DST_DIR}"/include
+
 
 #-------------------------------------------------------------------------------
 #
@@ -263,10 +285,8 @@ copy_headers ${SAMPLE_DIR}/tfm/install/interface/include				"${DST_DIR}"/tfm/ins
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/cores/arduino					"${DST_DIR}"/Arduino-Zephyr-API/cores			--recursive
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/"*.h"				"${DST_DIR}"/Arduino-Zephyr-API/variants
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
-copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160_ns	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
+#copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160_ns	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/libraries/Wire/"*.h"			"${DST_DIR}"/Arduino-Zephyr-API/libraries/Wire
-#copy_headers ${ZEPHYR_BASE}/include/zephyr								"${DST_DIR}"/zephyr/include						--recursive
-#copy_headers ${ZEPHYR_BASE}/lib/libc/minimal/include					"${DST_DIR}"/zephyr/lib/libc/minimal/			--recursive
 copy_headers ${ZEPHYR_BASE}/include										"${DST_DIR}"/zephyr								--recursive
 copy_headers ${ZEPHYR_BASE}/modules/cmsis/"*.h"							"${DST_DIR}"/zephyr/modules/cmsis
 copy_headers ${ZEPHYR_BASE}/modules/hal_nordic/nrfx/"*.h"				"${DST_DIR}"/zephyr/modules/hal_nordic/nrfx
@@ -285,7 +305,6 @@ copy_headers ${NRF_MODULES_PATH}/hal/nordic/nrfx/hal					"${DST_DIR}"/modules/ha
 copy_headers ${NRF_MODULES_PATH}/hal/nordic/nrfx/haly					"${DST_DIR}"/modules/hal/nordic/nrfx			--recursive
 copy_headers ${NRF_MODULES_PATH}/hal/nordic/nrfx/drivers/"*.h"			"${DST_DIR}"/modules/hal/nordic/nrfx/drivers/
 copy_headers ${NRF_MODULES_PATH}/hal/nordic/nrfx/drivers/include/"*.h"	"${DST_DIR}"/modules/hal/nordic/nrfx/drivers/include
-#copy_headers ${ZEPHYR_SDK_INSTALL_DIR}/arm-zephyr-eabi/lib/gcc/arm-zephyr-eabi/12.2.0/include		"${DST_DIR}"/sdk	--recursive
 
 
 find "${DST_DIR}" -type f ! -iname "*.h" -delete
@@ -372,5 +391,24 @@ if [ ! -f ${DST_DIR}/libkernel.a ]; then
 fi
 
 
+#-------------------------------------------------------------------------------
+#
+# Debugger
+#
+GDB_NAME=arm-none-eabi-gdb.exe
+if [ -f ${MY_DIR}/${GDB_NAME} ]; then
+	# Add debugger 
+	mkdir -p ${GDB_DST_DIR}
+	cp --update ${MY_DIR}/${GDB_NAME} ${GDB_DST_DIR}/${GDB_NAME} 
 
-
+	cp --update ${MY_DIR}/templates/debug_custom.json ${HARDWARE_DST_DIR}/
+else
+	echo -e ${YELLOW}
+	echo   WARNING: Debugger \(${GDB_NAME}\) cannot be found 
+	echo '        ' in ${MY_DIR}.
+	echo 
+	echo '        ' Without it, debugging in Arduino IDE will not be possible.
+	echo '        ' The debugger can be downloaded from:
+	echo '            ' \"https://developer.arm.com/Tools and Software/GNU Toolchain\"
+	echo -e ${NORMAL}
+fi
