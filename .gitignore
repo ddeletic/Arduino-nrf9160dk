@@ -11,4 +11,7 @@ obsolete/
 arduino_samples/arduino-cli.exe
 bosl/
 .vscode/arduino.json
+*/launch.json
+*.theia*
 arm-none-eabi-gdb.exe
+*.secret*
