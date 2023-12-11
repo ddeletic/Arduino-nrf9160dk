@@ -36,19 +36,19 @@ int slm_vbat(int* bat_mv){
     return ret;
 }
 
-// void modem_init(void){
-//     int err;
+void modem_init(void){
+    int err;
 
-//     if (IS_ENABLED(CONFIG_LTE_AUTO_INIT_AND_CONNECT)) {
-//         /* Do nothing, modem is already configured and LTE connected. */
-//     } else {
-//         err = lte_lc_init();
-//         if (err) {
-//             printk("Modem initialization failed, error: %d\n", err);
-//             return;
-//         }
-//     }
-// }
+    if (IS_ENABLED(CONFIG_LTE_AUTO_INIT_AND_CONNECT)) {
+        /* Do nothing, modem is already configured and LTE connected. */
+    } else {
+        err = lte_lc_init();
+        if (err) {
+            printk("Modem initialization failed, error: %d\n", err);
+            return;
+        }
+    }
+}
 
 
 // int configure_low_power(void){
@@ -101,23 +101,24 @@ int slm_vbat(int* bat_mv){
 // }
 
 void setup(){
-    // modem_init();
+    modem_init();
     // configure_low_power();
     // modem_network_register();
     nrf_modem_lib_init();
-}
-
-void loop(void){
-    // int bat_mv;
-    // slm_vbat(&bat_mv);
-    // Serial.println(bat_mv);
 
     int ret;
     char response[1024];
     Serial.print("sending AT. Response: ");
     ret = nrf_modem_at_cmd(response, sizeof(response), "AT");
     Serial.println(response);
+}
 
+void loop(void){
+    int bat_mv;
+    slm_vbat(&bat_mv);
+    Serial.print("SLM battery voltage: ");
+    Serial.print(bat_mv);
+    Serial.println(" (mV)");
 
     k_msleep(1000);
 }
