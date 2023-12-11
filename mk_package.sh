@@ -100,6 +100,19 @@ if [ ! -d "${SAMPLE_DIR}/zephyr/include/generated" ]; then
 	echo -e ${NORMAL}
 	exit 1
 fi
+if [ ! -d "${ZEPHYR_BASE}" ]; then
+	echo -e ${RED}
+	echo 'ERROR: Zephyr project directory cannot be found.'
+	if [ -z ${ZEPHYR_BASE+x} ]; then 
+		echo '       Variable ZEPHYR_BASE is not defined.'
+		echo '       Please run \'source ./env.sh\'.'
+	else
+		echo '       Variable ZEPHYR_BASE points to a non existent directory.'
+		echo '       Check your Nordic SDK installation.'
+	fi
+	echo -e ${NORMAL}
+	exit 1
+fi
 if [ ! -d "${ZEPHYR_SDK_INSTALL_DIR}" ]; then
 	echo -e ${RED}
 	echo 'ERROR: Zephyr SDK toolkit directory cannot be found.'
@@ -119,19 +132,6 @@ if [ ! -d "${ZEPHYR_TOOLKIT_SRC_DIR}" ]; then
 	echo -e ${RED}
 	echo 'ERROR: Zephyr toolkit directory (zephyr-sdk-x.y.z\arm-zephyr-eabi) cannot be found.'
 	echo '       Please run setup.sh and ensure it completes successfully.'
-	echo -e ${NORMAL}
-	exit 1
-fi
-if [ ! -d "${ZEPHYR_BASE}" ]; then
-	echo -e ${RED}
-	echo 'ERROR: Zephyr project directory cannot be found.'
-	if [ -z ${ZEPHYR_BASE+x} ]; then 
-		echo '       Variable ZEPHYR_BASE is not defined.'
-		echo '       Please run this script from a "nRF Connect SDK" bash terminal.'
-	else
-		echo '       Variable ZEPHYR_BASE points to a non existent directory.'
-		echo '       Check your Nordic SDK installation.'
-	fi
 	echo -e ${NORMAL}
 	exit 1
 fi
