@@ -13,10 +13,9 @@ HIGHLIGHT='\e[30;48;5;41m'
 #
 # This script prepares necessary files for the BoSL Arduino Package using 
 # nFR9160dk board and Nordic 'nRF Connect SDK' which includes Zephyr. The 
-# package relies on a simple project (sample-zephyr-project) being pre-built 
-# by Zephyr. Once that is complete, we collect necessary include files and 
-# built libraries, and we package them, so that Arduino
-# can link them together into a working executable.
+# package relies on a pre-built sample project (zephyr_samples/at_client) 
+# We collect necessary include files and built libraries, we package them, 
+# so that Arduino can link them together into a working executable.
 #
 #-------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -77,7 +76,7 @@ ZEPHYR_TOOLKIT_DST_DIR=${MY_DIR}/bosl/tools/arm-zephyr-eabi/12.2.0
 NRFJPROG_DST_DIR=${MY_DIR}/bosl/tools/nrfjprog/10.22.1
 GEN_ISR_TABLES_DST_DIR=${MY_DIR}/bosl/tools/gen_isr_tables/0.0.0
 MERGEHEX_DST_DIR=${MY_DIR}/bosl/tools/mergehex/0.0.0
-GDB_DST_DIR=${MY_DIR}/bosl/tools/gdb/13.2.90
+GDB_DST_DIR=${MY_DIR}/bosl/tools/arm-none-eabi-gdb/13.2.90
 
 
 # NOTE: NRFJPROG_SRC_DIR points to a directory residing outside of this project. 
@@ -87,41 +86,41 @@ GDB_DST_DIR=${MY_DIR}/bosl/tools/gdb/13.2.90
 
 if [ ! -d "${NRFJPROG_SRC_DIR}" ]; then
 	echo -e ${RED}
-	echo 'ERROR: Nordic Programming Tool directory cannot be found.'
-	echo '       Please edit this script and point NRFJPROG_SRC_DIR'
-	echo '       to the correct location.'
+	echo  ERROR: Nordic Programming Tool directory cannot be found.
+	echo '       'Please edit this script and point NRFJPROG_SRC_DIR
+	echo '       'to the correct location.
 	echo -e ${NORMAL}
 	exit 1
 fi
 if [ ! -d "${SAMPLE_DIR}/zephyr/include/generated" ]; then
 	echo -e ${RED}
-	echo 'ERROR: Sample project (zephyr_samples/at_client) appears not to have been built. '
-	echo '       Please build  at_sample project and try again.'
+	echo  ERROR: Sample project \(zephyr_samples/at_client\) appears not to have been built. 
+	echo '       'Please build at_sample project and try again.
 	echo -e ${NORMAL}
 	exit 1
 fi
 if [ ! -d "${ZEPHYR_BASE}" ]; then
 	echo -e ${RED}
-	echo 'ERROR: Zephyr project directory cannot be found.'
+	echo ERROR: Zephyr project directory cannot be found.
 	if [ -z ${ZEPHYR_BASE+x} ]; then 
-		echo '       Variable ZEPHYR_BASE is not defined.'
-		echo '       Please run \'source ./env.sh\'.'
+		echo '       'Variable ZEPHYR_BASE is not defined.
+		echo '       'Please run \'source ./env.sh\'.
 	else
-		echo '       Variable ZEPHYR_BASE points to a non existent directory.'
-		echo '       Check your Nordic SDK installation.'
+		echo '       'Variable ZEPHYR_BASE points to a non existent directory.
+		echo '       'Check your Nordic SDK installation.
 	fi
 	echo -e ${NORMAL}
 	exit 1
 fi
 if [ ! -d "${ZEPHYR_SDK_INSTALL_DIR}" ]; then
 	echo -e ${RED}
-	echo 'ERROR: Zephyr SDK toolkit directory cannot be found.'
+	echo ERROR: Zephyr SDK toolkit directory cannot be found.
 	if [ -z ${ZEPHYR_SDK_INSTALL_DIR+x} ]; then 
-		echo '       Variable ZEPHYR_SDK_INSTALL_DIR is not defined.'
-		echo '       Please run this script from a "nRF Connect SDK" bash terminal.'
+		echo '       'Variable ZEPHYR_SDK_INSTALL_DIR is not defined.
+		echo '       'Please run this script from a "nRF Connect SDK" bash terminal.
 	else
-		echo '       Variable ZEPHYR_SDK_INSTALL_DIR points to a non existent directory.'
-		echo '       This is serious. Complain to Dejan.'
+		echo '       'Variable ZEPHYR_SDK_INSTALL_DIR points to a non existent directory.
+		echo '       'This is serious. Complain to Dejan.
 	fi
 	echo -e ${NORMAL}
 	exit 1
@@ -130,11 +129,20 @@ else
 fi
 if [ ! -d "${ZEPHYR_TOOLKIT_SRC_DIR}" ]; then
 	echo -e ${RED}
-	echo 'ERROR: Zephyr toolkit directory (zephyr-sdk-x.y.z\arm-zephyr-eabi) cannot be found.'
-	echo '       Please run setup.sh and ensure it completes successfully.'
+	echo   ERROR: Zephyr toolkit directory \(${ZEPHYR_TOOLKIT_SRC_DIR}\) cannot be found.
+	echo '       'Please run setup.sh and ensure it completes successfully.
 	echo -e ${NORMAL}
 	exit 1
 fi
+python -c "import PyInstaller" 2> /dev/null
+if [ $? != 0 ]; then
+	echo -e ${RED}
+	echo   ERROR: Python module PyInstaller not found.
+	echo '       'Please run \'pip install PyInstaller\'.
+	echo -e ${NORMAL}
+	exit 1
+fi
+
 if [ ${REBUILD} -ne 0 ]; then
 	echo -e ${GREEN}Rebuilding...${NORMAL}
 	rm -rf ${HARDWARE_DIR}/inc
@@ -184,24 +192,24 @@ rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/nofp
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v6*
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v7*
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/arm-zephyr-eabi/lib/thumb/v8*.base
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-addr*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-as*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-c++*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ct*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-elfedit*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcc-*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcov*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gdb*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gprof*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ld.bfd*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-lto*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-nm*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-objdump*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-r*
-rm     "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-st*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-addr*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-as*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-c++*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ct*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-elfedit*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcc-*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gcov*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gdb*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-gprof*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-ld.bfd*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-lto*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-nm*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-objdump*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-r*
+rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/bin/arm-zephyr-eabi-st*
 rm -rf "${ZEPHYR_TOOLKIT_DST_DIR}"/share
 # We don't need the whole nrfjprog either
-rm     "${NRFJPROG_DST_DIR}"/*_release_notes.txt
+rm -rf "${NRFJPROG_DST_DIR}"/*_release_notes.txt
 rm -rf "${NRFJPROG_DST_DIR}"/lib
 rm -rf "${NRFJPROG_DST_DIR}"/include
 
@@ -285,7 +293,7 @@ copy_headers ${SAMPLE_DIR}/tfm/install/interface/include				"${DST_DIR}"/tfm/ins
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/cores/arduino					"${DST_DIR}"/Arduino-Zephyr-API/cores			--recursive
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/"*.h"				"${DST_DIR}"/Arduino-Zephyr-API/variants
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
-#copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160_ns	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
+copy_headers ${MY_DIR}/Arduino-Zephyr-API/variants/nrf9160dk_nrf9160_ns	"${DST_DIR}"/Arduino-Zephyr-API/variants		--recursive
 copy_headers ${MY_DIR}/Arduino-Zephyr-API/libraries/Wire/"*.h"			"${DST_DIR}"/Arduino-Zephyr-API/libraries/Wire
 copy_headers ${ZEPHYR_BASE}/include										"${DST_DIR}"/zephyr								--recursive
 copy_headers ${ZEPHYR_BASE}/modules/cmsis/"*.h"							"${DST_DIR}"/zephyr/modules/cmsis
@@ -318,7 +326,7 @@ rm -rf ${SAMPLE_DIR}/generated
 #
 # Archive all libraries to be used for linking
 #
-echo Creating libbosl.a...
+echo Collecting libraries...
 cd ${SAMPLE_DIR}
 ARCHIVE_PATH=zephyr/libbosl.a
 if [ ! -f ${ARCHIVE_PATH} ]; then
@@ -369,7 +377,6 @@ fi
 #
 # Collect libraries
 #
-echo Collecting Libraries...
 DST_DIR=${HARDWARE_DST_DIR}/lib
 if [ ! -d ${DST_DIR} ]; then
 	mkdir -p ${DST_DIR}

@@ -20,8 +20,9 @@ Before the BSP can be built, several prerequisites have to be met:
 - Nordic nRF SDK, preferably in the default location (C:\ncs\). Tested with v2.5.0.
 - Nordic command line tools (https://www.nordicsemi.com/Products/Development-tools/nRF-Command-Line-Tools) have to be installed on the host machine, preferably in the default location (C:\Program Files\Nordic Semiconductor\nrf-command-line-tools).
 - A version of Linux command line shell for Windows (e.g. GitBash) is necessary to build the BSP.
+- Python + Pyinstaller
 - Optionally, for quick and easy testing, Arduino Command line tool is required (download from https://arduino.github.io/arduino-cli/0.35/installation/#latest-release)
-- Only for v1.0.0  of this package, which has now been made obsolete, the following tools are required: CMake, Python, 7zip and Devicetree compiler. See https://docs.zephyrproject.org/latest/develop/getting_started/index.html for details.
+- Only for v1.0.0  of this package, which has now been made obsolete, the following tools are required: CMake, 7zip and Devicetree compiler. See https://docs.zephyrproject.org/latest/develop/getting_started/index.html for details.
 
 
 ## Board Support Package Generation
@@ -76,7 +77,9 @@ Open the Board Manager and search for 'bosl'. Only one result will come up. Inst
 
 ## Debugging
 
-Nordic nrf9160dk board comes with an integrated 'Segger J-Link' debugging probe. Therefore no additional hardware is required for debugging code on the board. From v1.0.2, this package supports debugging straight from Arduino IDE. 
+Nordic nrf9160dk board comes with an integrated 'Segger J-Link' debugging probe. Therefore no additional hardware is required for debugging code on the board. Debugging support from Arduino IDE is still under development.
+
+NOTE: Tools for building the package expect the debugger executable (arm-none-eabi-gdb) to be present and will issue a warning if not found. The debugger must be downloaded separately as it is too big to include into the repository.
 
 ### Prerequisites
 

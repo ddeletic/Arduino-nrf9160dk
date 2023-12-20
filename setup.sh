@@ -54,10 +54,24 @@ fi
 
 #-------------------------------------------------------------------------------
 #
+# Ensure we use the latest ArduinoCore-API
+#
+diff -qr -x .git -x deprecated* ${MY_DIR}/Arduino-Zephyr-API/cores/arduino/api ${MY_DIR}/ArduinoCore-API/api 1>&2 > /dev/null
+if [ $? != 0 ]; then
+	echo -e ${GREEN}Updating ArduinoCore-API${NORMAL}
+	cd ${MY_DIR}/Arduino-Zephyr-API/cores/arduino/
+	rm -rf api
+	ln -s ${MY_DIR}/ArduinoCore-API/api
+fi
+
+
+#-------------------------------------------------------------------------------
+#
 # Ensure Arduino-Zephyr-API is visible to Zephyr
 #
-diff -qr -x .git Arduino-Zephyr-API/ $ZEPHYR_BASE/../modules/lib/Arduino-Zephyr-API 1>&2 > /dev/null
+diff -qr -x .git ${MY_DIR}/Arduino-Zephyr-API/ $ZEPHYR_BASE/../modules/lib/Arduino-Zephyr-API 1>&2 > /dev/null
 if [ $? != 0 ]; then
+	echo -e ${GREEN}Updating $(realpath ${ZEPHYR_BASE}/../modules/lib/Arduino-Zephyr-API)${NORMAL}
 	cd "${ZEPHYR_BASE}/../modules/lib"
 	rm -rf Arduino-Zephyr-API
 	ln -s "${MY_DIR}/Arduino-Zephyr-API"

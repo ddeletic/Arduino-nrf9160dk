@@ -144,10 +144,6 @@ recipe.hooks.objcopy.postobjcopy.1.pattern="{runtime.tools.mergehex.path}/mergeh
 # hex
 recipe.hooks.objcopy.postobjcopy.2.pattern="{runtime.tools.mergehex.path}/mergehex.exe" -o {build.path}/{build.project_name}.hex --overlap=replace {libs.path}/tfm_secure.hex {build.path}/tfm_nonsecure.hex {libs.path}/tfm_s.hex {build.path}/{build.project_name}_pre0.hex
 
-#-------------------------------------------------------------------------------
-# debug_custom.json
-recipe.hooks.objcopy.postobjcopy.3.pattern.windows=cmd /v /c copy "{runtime.platform.path}\debug_custom.json" "{build.path}"
-
 
 ################################################################################
 # Sketch size
@@ -184,13 +180,17 @@ tools.nrfjprog_isp.upload.pattern="{path}/{cmd}" {upload.verbose} --program "{bu
 ################################################################################
 # Debug
 debug.name="BoSL nrf9160"
-debug.executable={build.path}/{build.project_name}.elf
+debug.executable={build.path}/{build.project_name}.ino.elf
 debug.toolchain.path={runtime.tools.gdb.path}
 debug.toolchain=gcc
 
 debug.device=nrf9160
 debug.server=jlink
 debug.interface=swd
+
+#-------------------------------------------------------------------------------
+# debug_custom.json
+recipe.hooks.objcopy.postobjcopy.9.pattern.windows=cmd /v /c copy "{runtime.platform.path}\debug_custom.json" "{build.path}"
 
 
 

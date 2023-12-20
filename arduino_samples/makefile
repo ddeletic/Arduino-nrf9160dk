@@ -15,12 +15,12 @@ HIGHLIGHT=\e[30;48;5;41m
 ifeq (1, $(shell if [ -e $(CURDIR)/arduino-cli.exe ]; then echo 1; fi))
   ARDUINO_CLI_PATH := ./arduino-cli.exe
 else
-  ifeq (0, $(shell which arduino-cli.exe 2>&1 /dev/null))
-    ARDUINO_CLI_PATH := arduino-cli.exe
-  else
+  ifeq (, $(shell which arduino-cli.exe))
     $(info [ERROR] arduino-cli.exe is missing)
     $(info . . . . It must be either in this directory or in system path)
     $(error  )
+  else
+    ARDUINO_CLI_PATH := arduino-cli.exe
   endif
 endif
 

@@ -5,9 +5,15 @@ NORMAL=\x1b[0m
 HIGHLIGHT=\e[30;48;5;41m
 
 
+ifndef ZEPHYR_BASE
+  $(info [ERROR] ZEPHYR_BASE is not set. Did you run env.sh? )
+  $(error  )
+endif
+
 .SILENT:
 
 all:
+	cd ${CURDIR}/../.. && ./setup.sh
 	echo -e "$(GREEN)Building AT_Client for nrf9160dk_nrf9160_ns$(NORMAL)"
 	west build -b nrf9160dk_nrf9160_ns
 

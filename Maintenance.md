@@ -6,7 +6,7 @@ This project depends on three upstream projects (Nordic SDK, Arduino-Zephyr-API,
 
 The current state of the source files on the 'master' branch has been setup with the 'Nordic nRF SDK' installed into `C:\ncs`, version used is v2.5.0. 
 
-All tools for building the package are bash scripts. Building has to be done from a bash shell under windows (e.g. git-bash). Several environment variables need to be set up. They are given in `env.sh`. Best to source this script every time the shell is started.
+All tools for building the package are bash scripts. Building has to be done from a bash shell under windows (e.g. git-bash). Several environment variables need to be set up. The defaults are given in `env.sh`. They may need to be adjusted for each developer. If modifying env.sh, please do not commit to git. Best to source this script every time the shell is started.
 
     ** STEP 1: source ./env.sh **
 

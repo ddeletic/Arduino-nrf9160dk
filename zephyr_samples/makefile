@@ -4,6 +4,10 @@ BOLD='\x1b[1m'
 NORMAL='\x1b[0m'
 HIGHLIGHT='\e[30;48;5;41m'
 
+ifndef ZEPHYR_BASE
+  $(info [ERROR] ZEPHYR_BASE is not set. Did you run env.sh? )
+  $(error  )
+endif
 
 .SILENT:
 
