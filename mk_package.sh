@@ -407,17 +407,33 @@ GDB_NAME=arm-none-eabi-gdb.exe
 cp --update ${MY_DIR}/templates/debug_custom.json ${HARDWARE_DST_DIR}/
 cp --update ${MY_DIR}/templates/nrf9160.svd		  ${HARDWARE_DST_DIR}/
 
-if [ -f ${MY_DIR}/${GDB_NAME} ]; then
-	# Add debugger 
-	mkdir -p ${GDB_DST_DIR}
-	cp --update ${MY_DIR}/${GDB_NAME} ${GDB_DST_DIR}/${GDB_NAME} 
-else
+if [ ! -f ${MY_DIR}/${GDB_NAME} ]; then
 	echo -e ${YELLOW}
 	echo   WARNING: Debugger \(${GDB_NAME}\) cannot be found 
 	echo '        ' in ${MY_DIR}.
 	echo 
 	echo '        ' Without it, debugging in Arduino IDE will not be possible.
-	echo '        ' The debugger can be downloaded from:
-	echo '            ' \"https://developer.arm.com/Tools and Software/GNU Toolchain\"
 	echo -e ${NORMAL}
+
+	read -p "Do you want to download it now (69M)? [Y/n] " response
+
+	DOWNLOAD=1
+	case $response in 
+		[yY] ) DOWNLOAD=1;;
+		[nN] ) DOWNLOAD=0;
+			echo -e ${YELLOW}
+			echo '        ' Skipping download.
+			echo '        ' The debugger can be downloaded from:
+			echo '            ' \"https://developer.arm.com/Tools and Software/GNU Toolchain\"
+			echo -e ${NORMAL};;
+	esac
+	if [ ${DOWNLOAD} != 0 ]; then
+		wget --quiet --show-progress https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/arm-none-eabi-gdb_v13.2.90.tar.gz
+		tar xzf arm-none-eabi-gdb_v13.2.90.tar.gz --strip-components 1
+	fi
+fi
+if [ -f ${MY_DIR}/${GDB_NAME} ]; then
+	# Add debugger 
+	mkdir -p ${GDB_DST_DIR}
+	cp --update ${MY_DIR}/${GDB_NAME} ${GDB_DST_DIR}/${GDB_NAME} 
 fi

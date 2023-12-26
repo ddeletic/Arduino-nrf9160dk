@@ -3,9 +3,9 @@
 
 .PHONY: pack
 
-all: build_zephyr_samples pack copy build_arduino
+all: pack copy build_arduino
 
-release: clean build_zephyr_samples pack dist
+release: clean pack dist
 
 test: qclean qpack qcopy build_arduino
 
