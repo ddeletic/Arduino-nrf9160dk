@@ -1,5 +1,3 @@
-#include <modem/nrf_modem_lib.h>
-#include <zephyr/drivers/clock_control/nrf_clock_control.h>
 #include <Arduino.h>
 
 #define SLEEP_TIME_MS 2300
