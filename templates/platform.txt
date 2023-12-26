@@ -179,20 +179,29 @@ tools.nrfjprog_isp.upload.pattern="{path}/{cmd}" {upload.verbose} --program "{bu
 
 ################################################################################
 # Debug
-debug.name="BoSL nrf9160"
-debug.executable={build.path}/{build.project_name}.ino.elf
-debug.toolchain.path={runtime.tools.gdb.path}
-debug.toolchain=gcc
-
-debug.device=nrf9160
+#
+# NOTE: Arduino IDE won't allow debugging if we do not specify 'openocd' as the 
+# debugging server. Additionally, it will fail to process debugging directive 
+# unless 'debug.server.openocd.script' is defined, even if unused.
+#
+# We must overwrite debug.server in debug_custom.json 
+#
 debug.server=jlink
-debug.interface=swd
+debug.server.jlink.script=
+
+debug.toolchain.path={runtime.tools.arm-none-eabi-gdb.path}
+debug.toolchain.prefix=arm-none-eabi-
+debug.svd_file={runtime.platform.path}/nrf9160.svd
+debug.executable={build.path}/{build.project_name}.elf
+
 
 #-------------------------------------------------------------------------------
 # debug_custom.json
-recipe.hooks.objcopy.postobjcopy.9.pattern.windows=cmd /v /c copy "{runtime.platform.path}\debug_custom.json" "{build.path}"
-
-
+#
+# TODO: debug_custom.json to be copied to the sketch directory
+#
+#recipe.hooks.prebuild.0.pattern.windows=cmd /v /c del "{sketch_path}\debug_custom.json"
+#recipe.hooks.objcopy.postobjcopy.9.pattern.windows=cmd /v /c copy "{runtime.platform.path}\debug_custom.json" "{sketch_path}"
 
 
 

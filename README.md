@@ -79,7 +79,7 @@ Open the Board Manager and search for 'bosl'. Only one result will come up. Inst
 
 Nordic nrf9160dk board comes with an integrated 'Segger J-Link' debugging probe. Therefore no additional hardware is required for debugging code on the board. Debugging support from Arduino IDE is still under development.
 
-NOTE: Tools for building the package expect the debugger executable (arm-none-eabi-gdb) to be present and will issue a warning if not found. The debugger must be downloaded separately as it is too big to include into the repository.
+NOTE: Tools for building the package expect the debugger executable (arm-none-eabi-gdb) to be present and will issue a warning if not found. The debugger must be downloaded separately as it is too big to include in the repository.
 
 ### Prerequisites
 
@@ -88,4 +88,29 @@ In order for the Arduino debugger to see the J-Link, 'Segger JLink GDB Server' i
 When installing J-Link Software, ensure it is installed to the default location: **"C:\Program Files\SEGGER\JLink"**.
 
 **NOTE:** Installing J-Link software to the default location is essential since Arduino does not support J-Link natively (in fact it actively ignores references to J-Link), and so the package uses Arduino's 'debug_custom.json' feature to direct the IDE towards the server. 
+
+### How to debug
+
+For successful debugging, a file named 'debug_custom.json' must be placed in the sketch directory, next to the .ino file. Creating of this file cannot be automated (yet). The contrents of this file must be as follows:
+```
+{
+    "name": "BoSL nrf9160",
+    "serverpath": "C:/Program Files/SEGGER/JLink/JLinkGDBServerCL.exe",
+    "device": "nrf9160"
+}
+```
+
+Arduino IDE (as of v2.2.1) starts up with the last sketch open and last board pre-selected. If the last board was BoSL nrf9160dk, then the **Start Debugging** button on the main toolbar is always disabled. In order to enable debugging, this button has to be re-enabled. To do so:
+
+* Select a different board from 'Tools :: Board' 
+* Select BoSL nrf9160 board again (from 'Tools :: Board')
+
+With debug_custom.json in place and the **Start Debugging** button enabled, click on the button. This will 
+
+* Open the debugging side bar
+* If everything is setup correctly, the debugging configurations drop-down list will contain 'BoSL nrf9160' configuration, and it will be pre-selected. 
+* The little green 'Start Debugging' button to the left of the drop-down list will be enabled.
+* In the background, Arduino will have made a temporary directory similar to "C:\Users\<username>\AppData\Local\Temp\arduino-ide2-d5ca121d10a1326dd2c3e59d44c1b18f", and created a file named launch.json in there.
+
+Once launch.json has been created, debugging can proceed without following the steps above. However, the procedure must be repeated for every sketch needing debugging. 
 

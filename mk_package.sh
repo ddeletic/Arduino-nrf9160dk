@@ -405,12 +405,12 @@ fi
 GDB_NAME=arm-none-eabi-gdb.exe
 
 cp --update ${MY_DIR}/templates/debug_custom.json ${HARDWARE_DST_DIR}/
+cp --update ${MY_DIR}/templates/nrf9160.svd		  ${HARDWARE_DST_DIR}/
 
 if [ -f ${MY_DIR}/${GDB_NAME} ]; then
 	# Add debugger 
 	mkdir -p ${GDB_DST_DIR}
 	cp --update ${MY_DIR}/${GDB_NAME} ${GDB_DST_DIR}/${GDB_NAME} 
-
 else
 	echo -e ${YELLOW}
 	echo   WARNING: Debugger \(${GDB_NAME}\) cannot be found 
