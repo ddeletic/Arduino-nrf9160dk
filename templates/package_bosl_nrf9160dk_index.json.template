@@ -16,9 +16,9 @@
 				"version": "x_y_z",
 				"category": "Contributed",
 				"help": {
-					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
+					"online": "https://bosl.com.au/"
 				},
-				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__PLATFORM_ARCHIVE_FILENAME__",
+				"url": "https://bosl.com.au/code/nrf9160dk/__PLATFORM_ARCHIVE_FILENAME__",
 				"archiveFileName": "__PLATFORM_ARCHIVE_FILENAME__",
 				"size": "__PLATFORM_ARCHIVE_SIZE__",
 				"checksum": "MD5:__PLATFORM_ARCHIVE_CHECKSUM__",
@@ -39,9 +39,9 @@
 				"version": "1.0.2",
 				"category": "Contributed",
 				"help": {
-					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
+					"online": "https://bosl.com.au/"
 				},
-				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/bosl_nrf9160dk_v1.0.2.tar.gz",
+				"url": "https://bosl.com.au/code/nrf9160dk/bosl_nrf9160dk_v1.0.2.tar.gz",
 				"archiveFileName": "bosl_nrf9160dk_v1.0.2.tar.gz",
 				"size": "8242976",
 				"checksum": "MD5:4d05e0395111516a824351e0d38ea26e",
@@ -62,9 +62,9 @@
 				"version": "1.0.1",
 				"category": "Contributed",
 				"help": {
-					"online": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads"
+					"online": "https://bosl.com.au/"
 				},
-				"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/bosl_nrf9160dk_v1.0.1.tar.gz",
+				"url": "https://bosl.com.au/code/nrf9160dk/bosl_nrf9160dk_v1.0.1.tar.gz",
 				"archiveFileName": "bosl_nrf9160dk_v1.0.1.tar.gz",
 				"size": "8241801",
 				"checksum": "MD5:8eb8d08821f7bcfcc47aafb326b47699",
@@ -83,7 +83,7 @@
 				"version": "12.2.0",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://www.deletic.org/BoSL/__ARM_ZEPHYR_EABI_ARCHIVE_FILENAME__",
+					"url": "https://bosl.com.au/code/nrf9160dk/__ARM_ZEPHYR_EABI_ARCHIVE_FILENAME__",
 					"archiveFileName": "__ARM_ZEPHYR_EABI_ARCHIVE_FILENAME__",
 					"size": "__ARM_ZEPHYR_EABI_ARCHIVE_SIZE__",
 					"checksum": "MD5:__ARM_ZEPHYR_EABI_ARCHIVE_CHECKSUM__"
@@ -94,7 +94,7 @@
 				"version": "0.0.0",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
+					"url": "https://bosl.com.au/code/nrf9160dk/__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
 					"archiveFileName": "__GEN_ISR_TABLES_ARCHIVE_FILENAME__",
 					"size": "__GEN_ISR_TABLES_ARCHIVE_SIZE__",
 					"checksum": "MD5:__GEN_ISR_TABLES_ARCHIVE_CHECKSUM__"
@@ -105,7 +105,7 @@
 				"version": "0.0.0",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__MERGEHEX_ARCHIVE_FILENAME__",
+					"url": "https://bosl.com.au/code/nrf9160dk/__MERGEHEX_ARCHIVE_FILENAME__",
 					"archiveFileName": "__MERGEHEX_ARCHIVE_FILENAME__",
 					"size": "__MERGEHEX_ARCHIVE_SIZE__",
 					"checksum": "MD5:__MERGEHEX_ARCHIVE_CHECKSUM__"
@@ -116,7 +116,7 @@
 				"version": "10.22.1",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__NRFJPROG_ARCHIVE_FILENAME__",
+					"url": "https://bosl.com.au/code/nrf9160dk/__NRFJPROG_ARCHIVE_FILENAME__",
 					"archiveFileName": "__NRFJPROG_ARCHIVE_FILENAME__",
 					"size": "__NRFJPROG_ARCHIVE_SIZE__",
 					"checksum": "MD5:__NRFJPROG_ARCHIVE_CHECKSUM__"
@@ -127,7 +127,7 @@
 				"version": "13.2.90",
 				"systems": [{
 					"host": "i686-mingw32",
-					"url": "https://github.com/ddeletic/arduino_bosl_nrf9160dk_downloads/raw/main/__GDB_ARCHIVE_FILENAME__",
+					"url": "https://bosl.com.au/code/nrf9160dk/__GDB_ARCHIVE_FILENAME__",
 					"archiveFileName": "__GDB_ARCHIVE_FILENAME__",
 					"size": "__GDB_ARCHIVE_SIZE__",
 					"checksum": "MD5:__GDB_ARCHIVE_CHECKSUM__"
