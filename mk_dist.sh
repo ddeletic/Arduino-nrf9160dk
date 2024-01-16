@@ -15,14 +15,25 @@ fi
 
 #-------------------------------------------------------------------------------
 #
+# Version numbers for individual archives. These may cange in the future
+#
+GEN_ISR_TABLES_VERSION=0.0.0
+MERGEHEX_VERSION=0.0.0
+NRFJPROG_VERSION=10.22.1
+TOOLCHAIN_VERSION=12.2.0
+GDB_VERSION=13.2.90
+
+
+#-------------------------------------------------------------------------------
+#
 # Create archives for distribution
 #
 PLATFORM_ARCHIVE_NAME=bosl_nrf9160dk_v${BOSL_VERSION}.tar.gz
-GEN_ISR_TABLES_ARCHIVE_NAME=bosl_gen_isr_tables_v0.0.0.tar.gz
-MERGEHEX_ARCHIVE_NAME=bosl_mergehex_v0.0.0.tar.gz
-NRFJPROG_ARCHIVE_NAME=bosl_nrfjprog_v10.22.1.tar.gz
-ARM_ZEPHYR_EABI_ARCHIVE_NAME=bosl_arm-zephyr-eabi_v12.2.0.tar.gz
-GDB_ARCHIVE_NAME=arm-none-eabi-gdb_v13.2.90.tar.gz
+GEN_ISR_TABLES_ARCHIVE_NAME=bosl_gen_isr_tables_v${GEN_ISR_TABLES_VERSION}.tar.gz
+MERGEHEX_ARCHIVE_NAME=bosl_mergehex_v${MERGEHEX_VERSION}.tar.gz
+NRFJPROG_ARCHIVE_NAME=bosl_nrfjprog_v${NRFJPROG_VERSION}.tar.gz
+ARM_ZEPHYR_EABI_ARCHIVE_NAME=bosl_arm-zephyr-eabi_v${TOOLCHAIN_VERSION}.tar.gz
+GDB_ARCHIVE_NAME=arm-none-eabi-gdb_v${GDB_VERSION}.tar.gz
 
 cd ${MY_DIR}/bosl/hardware/nrf9160
 echo Zipping bosl_nrf9160dk...
@@ -30,23 +41,23 @@ tar -czf ${MY_DIR}/dist/${PLATFORM_ARCHIVE_NAME} ${BOSL_VERSION}
 
 cd ${MY_DIR}/bosl/tools/gen_isr_tables
 echo Zipping gen_isr_tables...
-tar -czf ${MY_DIR}/dist/${GEN_ISR_TABLES_ARCHIVE_NAME} 0.0.0
+tar -czf ${MY_DIR}/dist/${GEN_ISR_TABLES_ARCHIVE_NAME} ${GEN_ISR_TABLES_VERSION}
 
 cd ${MY_DIR}/bosl/tools/mergehex
 echo Zipping mergehex...
-tar -czf ${MY_DIR}/dist/${MERGEHEX_ARCHIVE_NAME} 0.0.0
+tar -czf ${MY_DIR}/dist/${MERGEHEX_ARCHIVE_NAME} ${MERGEHEX_VERSION}
 
 cd ${MY_DIR}/bosl/tools/nrfjprog
 echo Zipping nrfjprog...
-tar -czf ${MY_DIR}/dist/${NRFJPROG_ARCHIVE_NAME} 10.22.1
+tar -czf ${MY_DIR}/dist/${NRFJPROG_ARCHIVE_NAME} ${NRFJPROG_VERSION}
 
 cd ${MY_DIR}/bosl/tools/arm-zephyr-eabi
 echo Zipping arm-zephyr-eabi...
-tar -czf ${MY_DIR}/dist/${ARM_ZEPHYR_EABI_ARCHIVE_NAME} 12.2.0
+tar -czf ${MY_DIR}/dist/${ARM_ZEPHYR_EABI_ARCHIVE_NAME} ${TOOLCHAIN_VERSION}
 
-cd ${MY_DIR}/bosl/tools/gdb
+cd ${MY_DIR}/bosl/tools/arm-none-eabi-gdb
 echo Zipping gdb...
-tar -czf ${MY_DIR}/dist/${GDB_ARCHIVE_NAME} 13.2.90
+tar -czf ${MY_DIR}/dist/${GDB_ARCHIVE_NAME} ${GDB_VERSION}
 
 
 #-------------------------------------------------------------------------------

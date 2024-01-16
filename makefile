@@ -1,7 +1,7 @@
 .SILENT:
 
 
-.PHONY: pack
+.PHONY: pack dist
 
 all: pack copy build_arduino
 
@@ -32,7 +32,7 @@ z_all: setup
 	cd zephyr_samples && $(MAKE)
 
 dist:
-	cd ${CURDIR} &&./mk_dist.sh
+	cd ${CURDIR} && ./mk_dist.sh
 
 clean_samples:
 	cd arduino_samples && $(MAKE) clean
