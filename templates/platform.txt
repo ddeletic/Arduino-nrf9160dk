@@ -189,6 +189,7 @@ tools.nrfjprog_isp.upload.pattern="{path}/{cmd}" {upload.verbose} --program "{bu
 debug.server=jlink
 debug.server.jlink.script=
 
+debug.toolchain=gcc
 debug.toolchain.path={runtime.tools.arm-none-eabi-gdb.path}
 debug.toolchain.prefix=arm-none-eabi-
 debug.svd_file={runtime.platform.path}/nrf9160.svd
